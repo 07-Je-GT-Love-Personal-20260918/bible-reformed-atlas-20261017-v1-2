@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>圣经66卷书快速导览</title>
+  <style>
+    :root {
+      --bg: #f7f4ee;
+      --card: rgba(255,255,255,0.88);
+      --text: #2d2a26;
+      --muted: #6c6258;
+      --line: #e5dccf;
+      --gold: #b88a44;
+      --gold-soft: #ead9b6;
+      --accent: #5d7c6f;
+      --old: #8c6a43;
+      --new: #6a5acd;
+      --shadow: 0 10px 30px rgba(70,50,20,.08);
+      --radius: 20px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, #fff8e8 0, transparent 28%),
+        radial-gradient(circle at top right, #eef5ff 0, transparent 20%),
+        linear-gradient(180deg, #fcfaf6 0%, #f6f1e7 100%);
+      line-height: 1.7;
+    }
+    .hero {
+      padding: 56px 20px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "✦ ✦ ✦";
+      letter-spacing: 10px;
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--gold);
+      opacity: .45;
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(30px, 5vw, 50px);
+      line-height: 1.2;
+    }
+    .subtitle {
+      max-width: 900px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 17px;
+    }
+    .wrap {
+      width: min(1200px, calc(100% - 28px));
+      margin: 0 auto 40px;
+    }
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,.6);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+    .section-title {
+      font-size: 24px;
+      margin: 0 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title .tag {
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #fff5df;
+      color: #8a6418;
+      border: 1px solid #efd9a4;
+    }
+    .pillbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .summary-box {
+      border-left: 4px solid var(--gold);
+      padding-left: 14px;
+      color: var(--muted);
+    }
+    .timeline {
+      position: relative;
+      margin-top: 10px;
+      padding-left: 18px;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--gold), #d9c6a5);
+    }
+    .t-item {
+      position: relative;
+      padding: 0 0 16px 18px;
+    }
+    .t-item::before {
+      content: "";
+      position: absolute;
+      left: -1px;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--gold);
+    }
+    .t-item strong { display: block; }
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .book {
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.04);
+      transition: transform .22s ease, box-shadow .22s ease;
+    }
+    .book:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,.08);
+    }
+    .book h4 {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .meta span {
+      font-size: 12px;
+      color: #6b6358;
+      background: #faf5eb;
+      border: 1px solid #eadfcd;
+      padding: 4px 8px;
+      border-radius: 999px;
+    }
+    .outline {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      color: #51483e;
+      font-size: 14px;
+    }
+    .ot-title { color: var(--old); }
+    .nt-title { color: var(--new); }
+    .legend {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .legend span {
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 28px 18px 48px;
+      font-size: 14px;
+    }
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(252,248,241,.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #eadfcd;
+    }
+    .sticky-nav .inner {
+      width: min(1200px, calc(100% - 28px));
+      margin: 0 auto;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 12px 0;
+    }
+    .sticky-nav a {
+      text-decoration: none;
+      color: #5a5148;
+      font-size: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+    }
+    .big-verse {
+      font-size: 18px;
+      color: #4d4439;
+      background: linear-gradient(90deg, #fff8ea, #fff);
+      border: 1px solid #efe0bf;
+      padding: 16px 18px;
+      border-radius: 16px;
+    }
+    @media (max-width: 640px) {
+      .card { padding: 18px; }
+      .hero { padding-top: 48px; }
+      .sticky-nav .inner { padding: 10px 0; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <h1>圣经66卷书快速导览</h1>
+    <p class="subtitle">一页入门，分区阅读，快速了解 <strong>整本圣经的结构、主线、每卷内容与大纲</strong>。适合初学者、主日学、查经前预习，也适合已经读过圣经的人作整体回顾。</p>
+  </section>
+
+  <nav class="sticky-nav">
+    <div class="inner">
+      <a href="#overview">全书总览</a>
+      <a href="#timeline">历史脉络</a>
+      <a href="#oldtestament">旧约39卷</a>
+      <a href="#newtestament">新约27卷</a>
+      <a href="#reading">阅读建议</a>
+    </div>
+  </nav>
+
+  <main class="wrap grid" style="gap:20px; margin-top: 22px;">
+    <section id="overview" class="card">
+      <h2 class="section-title">整本圣经怎么读 <span class="tag">快速抓主线</span></h2>
+      <div class="grid grid-2">
+        <div>
+          <div class="summary-box">
+            <p><strong>一句话主线：</strong>神创造世界，人因罪堕落；神拣选、救赎、保守祂的百姓，并最终借着耶稣基督完成救恩，带来新天新地的盼望。</p>
+          </div>
+          <div class="pillbar">
+            <span class="pill">创造</span>
+            <span class="pill">堕落</span>
+            <span class="pill">应许</span>
+            <span class="pill">拣选</span>
+            <span class="pill">律法</span>
+            <span class="pill">国度</span>
+            <span class="pill">先知</span>
+            <span class="pill">弥赛亚</span>
+            <span class="pill">十字架</span>
+            <span class="pill">复活</span>
+            <span class="pill">教会</span>
+            <span class="pill">新天新地</span>
+          </div>
+        </div>
+        <div class="big-verse">
+          <strong>最简单的理解：</strong><br/>
+          旧约是在预备基督，<br/>
+          福音书是在显明基督，<br/>
+          使徒行传与书信是在见证基督，<br/>
+          启示录是在等候基督再来。
+        </div>
+      </div>
+      <div class="legend">
+        <span>旧约：39卷</span>
+        <span>新约：27卷</span>
+        <span>总计：66卷</span>
+        <span>核心人物：耶稣基督</span>
+      </div>
+    </section>
+
+    <section id="timeline" class="card">
+      <h2 class="section-title">圣经历史脉络 <span class="tag">按时代理解更清楚</span></h2>
+      <div class="timeline">
+        <div class="t-item"><strong>创世与列祖时期</strong> 从创造、堕落、洪水、巴别塔，到亚伯拉罕、以撒、雅各、约瑟，神开始显明祂拣选和立约的计划。</div>
+        <div class="t-item"><strong>出埃及与旷野时期</strong> 神借摩西带领以色列人出埃及，赐下律法，会幕敬拜也在这一时期形成。</div>
+        <div class="t-item"><strong>进入迦南与士师时期</strong> 约书亚带领百姓进入应许之地；之后百姓多次悖逆，神兴起士师施行拯救。</div>
+        <div class="t-item"><strong>联合王国时期</strong> 扫罗、大卫、所罗门三位君王统治全以色列，国度达到高峰，也埋下分裂种子。</div>
+        <div class="t-item"><strong>南北分国与先知时期</strong> 以色列分为北国和南国，百姓不断偏离神；神差派先知呼召悔改，并宣告审判与盼望。</div>
+        <div class="t-item"><strong>被掳与归回时期</strong> 北国被亚述灭亡，南国被巴比伦掳去；后来部分百姓归回，重建圣殿和城墙。</div>
+        <div class="t-item"><strong>两约之间</strong> 旧约结束到新约开始之间，犹太民族在外邦统治下等候弥赛亚来临。</div>
+        <div class="t-item"><strong>耶稣降生、受死与复活</strong> 四福音书见证基督的生平、教训、神迹、十字架和复活，是整本圣经的中心。</div>
+        <div class="t-item"><strong>教会建立与福音扩展</strong> 圣灵降临后，使徒广传福音，教会在逼迫与争战中成长。</div>
+        <div class="t-item"><strong>末世盼望</strong> 启示录显明基督最终得胜，神的百姓进入新天新地。</div>
+      </div>
+    </section>
+
+    <section id="oldtestament" class="card">
+      <h2 class="section-title ot-title">旧约 39 卷 <span class="tag">预备基督</span></h2>
+      <p class="subtitle" style="text-align:left; margin:0 0 8px;">旧约大致分为：<strong>律法书、历史书、诗歌智慧书、大先知书、小先知书</strong>。重点在于：神如何创造、立约、拣选、管教并保守祂的百姓。</p>
+      <div class="books-grid">
+        <div class="book"><h4>创世记</h4><div class="meta"><span>律法书</span><span>起初与列祖</span></div><div>内容：创造、堕落、洪水、列祖历史，是整本圣经的开端。</div><ul class="outline"><li>1-11：世界起源与人类堕落</li><li>12-50：亚伯拉罕到约瑟</li></ul></div>
+        <div class="book"><h4>出埃及记</h4><div class="meta"><span>律法书</span><span>救赎出奴役</span></div><div>内容：神借摩西拯救以色列出埃及，并与他们立约。</div><ul class="outline"><li>1-18：出埃及</li><li>19-24：西奈之约</li><li>25-40：会幕设立</li></ul></div>
+        <div class="book"><h4>利未记</h4><div class="meta"><span>律法书</span><span>圣洁与敬拜</span></div><div>内容：讲献祭、祭司、洁净与圣洁生活。</div><ul class="outline"><li>献祭条例</li><li>祭司制度</li><li>圣洁法则</li></ul></div>
+        <div class="book"><h4>民数记</h4><div class="meta"><span>律法书</span><span>旷野漂流</span></div><div>内容：记载百姓在旷野中的数点、悖逆与神的保守。</div><ul class="outline"><li>数点百姓</li><li>旷野失败</li><li>预备进入迦南</li></ul></div>
+        <div class="book"><h4>申命记</h4><div class="meta"><span>律法书</span><span>重申圣约</span></div><div>内容：摩西临终前重述律法，劝勉百姓忠于神。</div><ul class="outline"><li>回顾恩典</li><li>重申律法</li><li>祝福与咒诅</li></ul></div>
+
+        <div class="book"><h4>约书亚记</h4><div class="meta"><span>历史书</span><span>进入应许地</span></div><div>内容：神带领百姓征服迦南并分地为业。</div><ul class="outline"><li>进入迦南</li><li>争战得地</li><li>分地与立约</li></ul></div>
+        <div class="book"><h4>士师记</h4><div class="meta"><span>历史书</span><span>反复循环</span></div><div>内容：百姓悖逆、受压、呼求、得救，循环不断。</div><ul class="outline"><li>离弃神</li><li>士师拯救</li><li>属灵混乱</li></ul></div>
+        <div class="book"><h4>路得记</h4><div class="meta"><span>历史书</span><span>恩典与救赎</span></div><div>内容：在黑暗士师时代中显出神温柔的护理。</div><ul class="outline"><li>苦难</li><li>转机</li><li>至近亲属救赎</li></ul></div>
+        <div class="book"><h4>撒母耳记上</h4><div class="meta"><span>历史书</span><span>王国开端</span></div><div>内容：从士师时代转入君王时代，扫罗兴起。</div><ul class="outline"><li>撒母耳</li><li>扫罗被立</li><li>大卫登场</li></ul></div>
+        <div class="book"><h4>撒母耳记下</h4><div class="meta"><span>历史书</span><span>大卫作王</span></div><div>内容：记载大卫王朝、神与大卫立约及其跌倒。</div><ul class="outline"><li>大卫国度</li><li>大卫之约</li><li>家庭与国度危机</li></ul></div>
+        <div class="book"><h4>列王纪上</h4><div class="meta"><span>历史书</span><span>荣耀与分裂</span></div><div>内容：所罗门登基、建殿，之后国家分裂。</div><ul class="outline"><li>所罗门兴盛</li><li>建圣殿</li><li>南北分国</li></ul></div>
+        <div class="book"><h4>列王纪下</h4><div class="meta"><span>历史书</span><span>亡国与被掳</span></div><div>内容：南北两国一路败坏，最终分别灭亡。</div><ul class="outline"><li>先知事工</li><li>北国灭亡</li><li>南国被掳</li></ul></div>
+        <div class="book"><h4>历代志上</h4><div class="meta"><span>历史书</span><span>圣殿视角</span></div><div>内容：从圣殿和敬拜角度重述大卫历史。</div><ul class="outline"><li>家谱</li><li>大卫作王</li><li>预备建殿</li></ul></div>
+        <div class="book"><h4>历代志下</h4><div class="meta"><span>历史书</span><span>南国历史</span></div><div>内容：聚焦犹大诸王、圣殿和归回盼望。</div><ul class="outline"><li>所罗门建殿</li><li>犹大诸王</li><li>被掳与归回</li></ul></div>
+        <div class="book"><h4>以斯拉记</h4><div class="meta"><span>历史书</span><span>归回与重建</span></div><div>内容：百姓归回耶路撒冷，重建圣殿。</div><ul class="outline"><li>首次归回</li><li>重建圣殿</li><li>律法更新</li></ul></div>
+        <div class="book"><h4>尼希米记</h4><div class="meta"><span>历史书</span><span>重修城墙</span></div><div>内容：重建耶路撒冷城墙并推动属灵改革。</div><ul class="outline"><li>重建城墙</li><li>抵挡攻击</li><li>立约更新</li></ul></div>
+        <div class="book"><h4>以斯帖记</h4><div class="meta"><span>历史书</span><span>隐藏的护理</span></div><div>内容：神在看似隐藏中保守祂的百姓脱离灭绝。</div><ul class="outline"><li>王后被立</li><li>危机来临</li><li>转败为胜</li></ul></div>
+
+        <div class="book"><h4>约伯记</h4><div class="meta"><span>智慧书</span><span>苦难之谜</span></div><div>内容：义人为何受苦，以及人当如何在苦难中敬畏神。</div><ul class="outline"><li>苦难临到</li><li>辩论</li><li>神显现</li></ul></div>
+        <div class="book"><h4>诗篇</h4><div class="meta"><span>智慧书</span><span>祷告与赞美</span></div><div>内容：神百姓敬拜、哀歌、赞美、悔改与盼望的诗歌集。</div><ul class="outline"><li>赞美</li><li>哀求</li><li>君王与弥赛亚</li></ul></div>
+        <div class="book"><h4>箴言</h4><div class="meta"><span>智慧书</span><span>敬畏与生活</span></div><div>内容：敬畏耶和华是智慧的开端，涉及言语、家庭、工作等。</div><ul class="outline"><li>智慧训诲</li><li>生活箴言</li><li>智慧妇人</li></ul></div>
+        <div class="book"><h4>传道书</h4><div class="meta"><span>智慧书</span><span>虚空与意义</span></div><div>内容：日光之下若离开神，一切都是虚空。</div><ul class="outline"><li>虚空观察</li><li>人生反思</li><li>结论：敬畏神</li></ul></div>
+        <div class="book"><h4>雅歌</h4><div class="meta"><span>智慧书</span><span>爱情之歌</span></div><div>内容：以诗歌描绘婚姻之爱，也常被看作神与子民之爱的象征。</div><ul class="outline"><li>相爱</li><li>思念</li><li>联合</li></ul></div>
+
+        <div class="book"><h4>以赛亚书</h4><div class="meta"><span>大先知</span><span>审判与救恩</span></div><div>内容：严厉责备罪恶，同时最丰富地预言弥赛亚和新创造。</div><ul class="outline"><li>审判列国</li><li>安慰与拯救</li><li>受苦仆人</li></ul></div>
+        <div class="book"><h4>耶利米书</h4><div class="meta"><span>大先知</span><span>流泪先知</span></div><div>内容：宣告耶路撒冷将亡，也预告新约的来到。</div><ul class="outline"><li>警告不悔改</li><li>国破家亡</li><li>新约应许</li></ul></div>
+        <div class="book"><h4>耶利米哀歌</h4><div class="meta"><span>大先知</span><span>国破之哀</span></div><div>内容：为耶路撒冷被毁而哀哭，但仍仰望神的怜悯。</div><ul class="outline"><li>哀歌</li><li>审判</li><li>盼望</li></ul></div>
+        <div class="book"><h4>以西结书</h4><div class="meta"><span>大先知</span><span>异象与复兴</span></div><div>内容：在被掳之地宣告审判，也预示新心、新灵与未来圣殿。</div><ul class="outline"><li>荣耀离殿</li><li>审判信息</li><li>复兴异象</li></ul></div>
+        <div class="book"><h4>但以理书</h4><div class="meta"><span>大先知</span><span>列国与神国</span></div><div>内容：在外邦帝国中忠心见证神，并得启示看见神国终必得胜。</div><ul class="outline"><li>宫廷故事</li><li>火窑狮坑</li><li>末世异象</li></ul></div>
+
+        <div class="book"><h4>何西阿书</h4><div class="meta"><span>小先知</span><span>不变的爱</span></div><div>内容：借婚姻比喻神对不忠子民仍存慈爱。</div></div>
+        <div class="book"><h4>约珥书</h4><div class="meta"><span>小先知</span><span>耶和华的日子</span></div><div>内容：蝗灾成为审判预表，也预告圣灵浇灌。</div></div>
+        <div class="book"><h4>阿摩司书</h4><div class="meta"><span>小先知</span><span>公义呼声</span></div><div>内容：责备表面宗教而缺乏公义怜悯。</div></div>
+        <div class="book"><h4>俄巴底亚书</h4><div class="meta"><span>小先知</span><span>责罚骄傲</span></div><div>内容：宣告以东因骄傲和幸灾乐祸受审判。</div></div>
+        <div class="book"><h4>约拿书</h4><div class="meta"><span>小先知</span><span>神怜悯外邦</span></div><div>内容：神不仅顾念以色列，也怜悯尼尼微人。</div></div>
+        <div class="book"><h4>弥迦书</h4><div class="meta"><span>小先知</span><span>审判与伯利恒</span></div><div>内容：责备罪恶，并预言弥赛亚将生于伯利恒。</div></div>
+        <div class="book"><h4>那鸿书</h4><div class="meta"><span>小先知</span><span>尼尼微倾覆</span></div><div>内容：宣告邪恶帝国终不能逃脱神的审判。</div></div>
+        <div class="book"><h4>哈巴谷书</h4><div class="meta"><span>小先知</span><span>义人因信得生</span></div><div>内容：先知在困惑中学习凭信心仰望神。</div></div>
+        <div class="book"><h4>西番雅书</h4><div class="meta"><span>小先知</span><span>审判与余民</span></div><div>内容：耶和华的日子既有审判，也有余民得救的喜乐。</div></div>
+        <div class="book"><h4>哈该书</h4><div class="meta"><span>小先知</span><span>重建圣殿</span></div><div>内容：劝勉归回百姓先求神的家。</div></div>
+        <div class="book"><h4>撒迦利亚书</h4><div class="meta"><span>小先知</span><span>异象与弥赛亚</span></div><div>内容：充满异象，并多处指向将来的君王与牧人。</div></div>
+        <div class="book"><h4>玛拉基书</h4><div class="meta"><span>小先知</span><span>旧约收尾</span></div><div>内容：责备冷淡的敬拜，呼唤悔改，并期待主的来到。</div></div>
+      </div>
+    </section>
+
+    <section id="newtestament" class="card">
+      <h2 class="section-title nt-title">新约 27 卷 <span class="tag">显明基督</span></h2>
+      <p class="subtitle" style="text-align:left; margin:0 0 8px;">新约大致分为：<strong>四福音书、使徒行传、保罗书信、普通书信、启示录</strong>。重点在于：基督已经来到，救恩已经成就，教会正在等候主再来。</p>
+      <div class="books-grid">
+        <div class="book"><h4>马太福音</h4><div class="meta"><span>福音书</span><span>君王基督</span></div><div>内容：强调耶稣是应验旧约预言的弥赛亚君王。</div><ul class="outline"><li>降生与登山宝训</li><li>天国比喻</li><li>受死与复活</li></ul></div>
+        <div class="book"><h4>马可福音</h4><div class="meta"><span>福音书</span><span>仆人基督</span></div><div>内容：节奏最紧凑，突出耶稣服事与权能。</div><ul class="outline"><li>服事与神迹</li><li>门徒训练</li><li>十字架道路</li></ul></div>
+        <div class="book"><h4>路加福音</h4><div class="meta"><span>福音书</span><span>人子救主</span></div><div>内容：注重历史次序，强调耶稣对贫穷人、罪人、外邦人的怜悯。</div><ul class="outline"><li>降生叙事</li><li>教导与比喻</li><li>受死复活</li></ul></div>
+        <div class="book"><h4>约翰福音</h4><div class="meta"><span>福音书</span><span>神子基督</span></div><div>内容：强调耶稣是神的儿子，叫人因信得生命。</div><ul class="outline"><li>道成肉身</li><li>七个神迹与我是</li><li>受死复活</li></ul></div>
+        <div class="book"><h4>使徒行传</h4><div class="meta"><span>历史书</span><span>教会扩展</span></div><div>内容：记载圣灵降临、教会建立、福音从耶路撒冷传到外邦。</div><ul class="outline"><li>五旬节</li><li>彼得事工</li><li>保罗宣教</li></ul></div>
+
+        <div class="book"><h4>罗马书</h4><div class="meta"><span>保罗书信</span><span>系统福音</span></div><div>内容：最系统讲明因信称义、成圣与神的救恩计划。</div></div>
+        <div class="book"><h4>哥林多前书</h4><div class="meta"><span>保罗书信</span><span>教会问题</span></div><div>内容：处理分党、圣餐、恩赐、复活等问题。</div></div>
+        <div class="book"><h4>哥林多后书</h4><div class="meta"><span>保罗书信</span><span>使徒职分</span></div><div>内容：显明软弱中的能力，以及保罗牧者般的心肠。</div></div>
+        <div class="book"><h4>加拉太书</h4><div class="meta"><span>保罗书信</span><span>因信称义</span></div><div>内容：强调人得救不是靠律法，而是靠基督。</div></div>
+        <div class="book"><h4>以弗所书</h4><div class="meta"><span>保罗书信</span><span>教会与基督</span></div><div>内容：讲教会在基督里的身份与合一生活。</div></div>
+        <div class="book"><h4>腓立比书</h4><div class="meta"><span>保罗书信</span><span>靠主喜乐</span></div><div>内容：在患难中仍以基督为至宝。</div></div>
+        <div class="book"><h4>歌罗西书</h4><div class="meta"><span>保罗书信</span><span>基督至上</span></div><div>内容：强调基督的丰盛与绝对首位。</div></div>
+        <div class="book"><h4>帖撒罗尼迦前书</h4><div class="meta"><span>保罗书信</span><span>等候主来</span></div><div>内容：勉励信徒圣洁生活，盼望主再来。</div></div>
+        <div class="book"><h4>帖撒罗尼迦后书</h4><div class="meta"><span>保罗书信</span><span>末世辨明</span></div><div>内容：纠正对主再来的误解，劝人安静作工。</div></div>
+        <div class="book"><h4>提摩太前书</h4><div class="meta"><span>教牧书信</span><span>教会治理</span></div><div>内容：论敬拜秩序、长老执事资格与牧养责任。</div></div>
+        <div class="book"><h4>提摩太后书</h4><div class="meta"><span>教牧书信</span><span>忠心到底</span></div><div>内容：保罗临终勉励提摩太持守真道。</div></div>
+        <div class="book"><h4>提多书</h4><div class="meta"><span>教牧书信</span><span>真理与善行</span></div><div>内容：强调纯正教训应带出敬虔生活。</div></div>
+        <div class="book"><h4>腓利门书</h4><div class="meta"><span>保罗书信</span><span>福音更新关系</span></div><div>内容：福音如何改变主仆关系与彼此接纳。</div></div>
+
+        <div class="book"><h4>希伯来书</h4><div class="meta"><span>普通书信</span><span>基督更美</span></div><div>内容：基督比先知、天使、摩西、祭司制度都更美。</div></div>
+        <div class="book"><h4>雅各书</h4><div class="meta"><span>普通书信</span><span>信心与行为</span></div><div>内容：真实信心必然结出生活中的果子。</div></div>
+        <div class="book"><h4>彼得前书</h4><div class="meta"><span>普通书信</span><span>苦难中的盼望</span></div><div>内容：勉励受苦信徒仰望荣耀产业。</div></div>
+        <div class="book"><h4>彼得后书</h4><div class="meta"><span>普通书信</span><span>防备假师傅</span></div><div>内容：提醒教会警惕异端并盼望主日来到。</div></div>
+        <div class="book"><h4>约翰一书</h4><div class="meta"><span>普通书信</span><span>生命与爱</span></div><div>内容：真信仰表现为真理、顺服与彼此相爱。</div></div>
+        <div class="book"><h4>约翰二书</h4><div class="meta"><span>普通书信</span><span>持守真理</span></div><div>内容：在爱中行真理，也防备错误教训。</div></div>
+        <div class="book"><h4>约翰三书</h4><div class="meta"><span>普通书信</span><span>接待同工</span></div><div>内容：鼓励接待忠心服事主的人。</div></div>
+        <div class="book"><h4>犹大书</h4><div class="meta"><span>普通书信</span><span>为真道争辩</span></div><div>内容：呼吁信徒竭力护卫所领受的真道。</div></div>
+        <div class="book"><h4>启示录</h4><div class="meta"><span>预言书</span><span>最终得胜</span></div><div>内容：借异象启示基督掌权、教会争战与新天新地的盼望。</div><ul class="outline"><li>七教会</li><li>印号碗与争战</li><li>新天新地</li></ul></div>
+      </div>
+    </section>
+
+    <section id="reading" class="card">
+      <h2 class="section-title">怎样最快入门圣经 <span class="tag">方便阅读</span></h2>
+      <div class="grid grid-3">
+        <div class="book">
+          <h4>第一步：先读主线书卷</h4>
+          <div>建议顺序：<strong>创世记 → 出埃及记 → 路加福音 → 约翰福音 → 使徒行传 → 罗马书 → 启示录 21-22章</strong>。</div>
+        </div>
+        <div class="book">
+          <h4>第二步：按类别读</h4>
+          <div>把圣经看成几大板块：律法、历史、诗歌智慧、先知、福音、书信、启示。先理解类别，再逐卷进入。</div>
+        </div>
+        <div class="book">
+          <h4>第三步：每卷只问三个问题</h4>
+          <div>这卷书讲什么？写给谁？它怎样指向基督？这样读，速度会快很多，也更不容易迷失。</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer">
+    愿这份导览帮助你先看见全貌，再进入经文本身。最好的方法，始终是回到圣经原文中反复阅读、默想与祷告。
+  </div>
+</body>
+</html>

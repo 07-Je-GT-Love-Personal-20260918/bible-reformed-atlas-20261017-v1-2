@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>圣经六十六卷速览</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --c-parchment:#FAF6F0;--c-ink:#2C2416;--c-gold:#B8860B;--c-gold-light:#D4A843;
+  --c-torah:#1B4332;--c-history-ot:#2D6A4F;--c-poetry:#5B3A8C;--c-major:#9B2226;
+  --c-minor:#CA6702;--c-gospel:#0A3D62;--c-acts:#1A5276;--c-paul:#6C3483;
+  --c-general:#1E8449;--c-apocalypse:#922B21;
+  --font-serif:'Noto Serif SC','Playfair Display',Georgia,serif;
+  --font-sans:'Noto Sans SC','Helvetica Neue',sans-serif;
+  --ease-out-expo:cubic-bezier(0.16,1,0.3,1);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-sans);background:var(--c-parchment);color:var(--c-ink);line-height:1.7;overflow-x:hidden}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--c-parchment)}
+::-webkit-scrollbar-thumb{background:var(--c-gold);border-radius:3px}
+
+/* ─── HERO ─── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  background:linear-gradient(170deg,#1a1510 0%,#2C2416 40%,#3d2e1a 100%);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 30%,rgba(184,134,11,0.15) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 70%,rgba(154,52,38,0.1) 0%,transparent 50%);
+}
+.hero::after{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B8860B' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-content{position:relative;z-index:1;text-align:center;padding:2rem}
+.hero-cross{
+  font-size:3rem;color:var(--c-gold);margin-bottom:1rem;
+  animation:glow 3s ease-in-out infinite alternate;
+}
+@keyframes glow{0%{text-shadow:0 0 10px rgba(184,134,11,0.3)}100%{text-shadow:0 0 30px rgba(184,134,11,0.6),0 0 60px rgba(184,134,11,0.2)}}
+.hero h1{
+  font-family:var(--font-serif);font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;
+  color:#FAF6F0;letter-spacing:0.08em;
+  animation:fadeUp 1.2s var(--ease-out-expo) both;
+}
+.hero h2{
+  font-family:var(--font-serif);font-size:clamp(1rem,2.5vw,1.4rem);font-weight:400;
+  color:var(--c-gold-light);margin-top:0.8rem;letter-spacing:0.15em;
+  animation:fadeUp 1.2s var(--ease-out-expo) 0.2s both;
+}
+.hero-meta{
+  display:flex;gap:2rem;justify-content:center;margin-top:2rem;flex-wrap:wrap;
+  animation:fadeUp 1.2s var(--ease-out-expo) 0.4s both;
+}
+.hero-stat{text-align:center;color:rgba(250,246,240,0.7);font-size:0.85rem}
+.hero-stat strong{display:block;font-family:var(--font-serif);font-size:1.8rem;color:var(--c-gold);font-weight:700}
+.hero-scroll{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  color:var(--c-gold-light);font-size:0.8rem;letter-spacing:0.1em;
+  animation:bounce 2s ease infinite;cursor:pointer;z-index:2;
+}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ─── NAV ─── */
+.nav-bar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(250,246,240,0.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(184,134,11,0.15);
+  padding:0.6rem 0;transition:box-shadow 0.3s;
+}
+.nav-bar.scrolled{box-shadow:0 2px 20px rgba(0,0,0,0.08)}
+.nav-inner{
+  max-width:1200px;margin:0 auto;display:flex;gap:0.4rem;padding:0 1rem;
+  overflow-x:auto;scrollbar-width:none;
+}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-pill{
+  white-space:nowrap;padding:0.35rem 0.9rem;border-radius:100px;font-size:0.78rem;
+  font-weight:500;cursor:pointer;transition:all 0.3s;border:1.5px solid transparent;
+  flex-shrink:0;letter-spacing:0.02em;
+}
+.nav-pill:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.nav-pill.active{color:#fff;border-color:transparent}
+
+/* ─── TIMELINE ─── */
+.timeline-section{
+  max-width:1100px;margin:4rem auto;padding:0 1.5rem;
+}
+.timeline-title{
+  font-family:var(--font-serif);font-size:1.8rem;font-weight:700;text-align:center;
+  color:var(--c-ink);margin-bottom:0.5rem;
+}
+.timeline-sub{text-align:center;color:#888;font-size:0.9rem;margin-bottom:2.5rem}
+.timeline-track{
+  position:relative;display:flex;justify-content:space-between;align-items:flex-start;
+  padding:0 0.5rem;
+}
+.timeline-track::before{
+  content:'';position:absolute;top:28px;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--c-torah),var(--c-history-ot),var(--c-poetry),var(--c-major),var(--c-gospel),var(--c-paul),var(--c-apocalypse));
+  border-radius:2px;
+}
+.tl-node{
+  position:relative;text-align:center;flex:1;min-width:0;
+  cursor:default;
+}
+.tl-dot{
+  width:14px;height:14px;border-radius:50%;margin:22px auto 8px;
+  position:relative;z-index:1;border:2px solid #fff;
+  box-shadow:0 1px 4px rgba(0,0,0,0.2);transition:transform 0.3s;
+}
+.tl-node:hover .tl-dot{transform:scale(1.4)}
+.tl-label{font-size:0.65rem;font-weight:600;line-height:1.3;color:var(--c-ink)}
+.tl-year{font-size:0.58rem;color:#999;margin-top:2px}
+
+/* ─── SECTION ─── */
+.section{padding:3rem 0}
+.section-header{
+  max-width:1100px;margin:0 auto 2rem;padding:0 1.5rem;
+  position:relative;
+}
+.section-banner{
+  border-radius:16px;padding:2.5rem 2rem;color:#fff;position:relative;overflow:hidden;
+}
+.section-banner::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 50%);
+}
+.section-banner::after{
+  content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;
+  border-radius:50%;background:rgba(255,255,255,0.05);
+}
+.section-icon{font-size:2.5rem;margin-bottom:0.5rem;display:block}
+.section-name{font-family:var(--font-serif);font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;letter-spacing:0.05em}
+.section-desc{font-size:0.9rem;opacity:0.85;margin-top:0.4rem;max-width:600px}
+.section-badge{
+  display:inline-block;margin-top:0.8rem;padding:0.3rem 1rem;
+  background:rgba(255,255,255,0.15);border-radius:100px;font-size:0.78rem;
+  backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.2);
+}
+.section-bg-text{
+  font-family:var(--font-serif);font-size:0.85rem;opacity:0.8;
+  margin-top:1rem;line-height:1.8;max-width:700px;
+}
+
+/* ─── CARDS GRID ─── */
+.cards-grid{
+  max-width:1100px;margin:0 auto;padding:0 1.5rem;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;
+}
+
+/* ─── BOOK CARD ─── */
+.book-card{
+  background:#fff;border-radius:14px;overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.04);
+  transition:all 0.4s var(--ease-out-expo);
+  opacity:0;transform:translateY(24px);
+  position:relative;
+}
+.book-card.visible{opacity:1;transform:translateY(0)}
+.book-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.1),0 2px 8px rgba(0,0,0,0.06);
+}
+.card-accent{height:4px;width:100%}
+.card-top{padding:1.2rem 1.4rem 0.8rem;display:flex;align-items:flex-start;gap:0.8rem}
+.card-chap{
+  flex-shrink:0;width:48px;height:48px;border-radius:10px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:1.1rem;line-height:1;
+}
+.card-chap small{font-size:0.55rem;font-weight:400;opacity:0.8;margin-top:2px}
+.card-title-area{flex:1;min-width:0}
+.card-title{font-family:var(--font-serif);font-size:1.25rem;font-weight:700;color:var(--c-ink);line-height:1.3}
+.card-eng{font-size:0.75rem;color:#aaa;font-family:'Playfair Display',serif;font-style:italic;margin-top:1px}
+.card-meta{display:flex;gap:0.6rem;margin-top:4px;flex-wrap:wrap}
+.card-tag{
+  font-size:0.65rem;padding:2px 8px;border-radius:100px;
+  background:rgba(0,0,0,0.04);color:#777;
+}
+
+.card-body{padding:0 1.4rem 1.2rem}
+.card-theme{
+  font-size:0.82rem;font-weight:600;margin-bottom:0.6rem;line-height:1.5;
+  padding-left:0.6rem;border-left:3px solid;
+}
+.card-verse{
+  font-family:var(--font-serif);font-size:0.8rem;color:#666;
+  padding:0.6rem 0.8rem;background:rgba(184,134,11,0.05);
+  border-radius:8px;margin-bottom:0.8rem;line-height:1.6;
+  border-left:2px solid var(--c-gold);position:relative;
+}
+.card-verse::before{content:'📌 ';font-size:0.7rem}
+.card-summary{font-size:0.82rem;color:#555;line-height:1.75;margin-bottom:0.8rem}
+
+.card-outline-toggle{
+  display:flex;align-items:center;gap:0.4rem;cursor:pointer;
+  font-size:0.78rem;font-weight:600;color:#888;
+  padding:0.4rem 0;border:none;background:none;transition:color 0.3s;
+  width:100%;
+}
+.card-outline-toggle:hover{color:var(--c-ink)}
+.card-outline-toggle .arrow{transition:transform 0.3s;font-size:0.6rem}
+.card-outline-toggle .arrow.open{transform:rotate(90deg)}
+.card-outline{
+  max-height:0;overflow:hidden;transition:max-height 0.5s var(--ease-out-expo);
+}
+.card-outline.open{max-height:500px}
+.card-outline-inner{padding:0.5rem 0 0.2rem}
+.outline-line{
+  font-size:0.78rem;color:#666;line-height:1.7;padding:0.15rem 0 0.15rem 0.8rem;
+  position:relative;
+}
+.outline-line::before{
+  content:'';position:absolute;left:0;top:50%;width:4px;height:4px;
+  border-radius:50%;transform:translateY(-50%);
+}
+
+/* Background section info */
+.card-bg-info{
+  margin-top:0.6rem;padding:0.7rem 0.8rem;
+  background:linear-gradient(135deg,rgba(44,36,22,0.03),rgba(184,134,11,0.04));
+  border-radius:8px;font-size:0.75rem;color:#777;line-height:1.7;
+}
+.card-bg-info strong{color:var(--c-ink);font-weight:600}
+
+/* ─── FOOTER ─── */
+.footer{
+  text-align:center;padding:3rem 1.5rem;
+  border-top:1px solid rgba(184,134,11,0.15);
+  color:#aaa;font-size:0.8rem;
+}
+.footer-cross{font-size:1.5rem;color:var(--c-gold);margin-bottom:0.5rem}
+
+/* ─── BACK TO TOP ─── */
+.back-top{
+  position:fixed;bottom:2rem;right:2rem;width:44px;height:44px;
+  border-radius:50%;background:var(--c-gold);color:#fff;border:none;
+  font-size:1.2rem;cursor:pointer;z-index:99;
+  box-shadow:0 4px 16px rgba(184,134,11,0.3);
+  opacity:0;transform:translateY(20px);transition:all 0.3s;
+}
+.back-top.visible{opacity:1;transform:translateY(0)}
+.back-top:hover{background:var(--c-gold-light);transform:translateY(-2px)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:640px){
+  .cards-grid{grid-template-columns:1fr;padding:0 1rem}
+  .hero h1{font-size:2.2rem}
+  .hero-meta{gap:1rem}
+  .section-banner{padding:1.5rem 1.2rem;border-radius:12px}
+  .tl-label{font-size:0.55rem}
+  .timeline-track{overflow-x:auto;padding-bottom:1rem}
+  .tl-node{min-width:60px}
+  .nav-pill{font-size:0.7rem;padding:0.3rem 0.7rem}
+}
+
+/* Animate sections */
+.section-header{opacity:0;transform:translateY(20px);transition:all 0.8s var(--ease-out-expo)}
+.section-header.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero" id="top">
+  <div class="hero-content">
+    <div class="hero-cross">✟</div>
+    <h1>圣经六十六卷</h1>
+    <h2>速 览 手 册</h2>
+    <div class="hero-meta">
+      <div class="hero-stat"><strong>39</strong>旧约</div>
+      <div class="hero-stat"><strong>27</strong>新约</div>
+      <div class="hero-stat"><strong>1189</strong>总章数</div>
+      <div class="hero-stat"><strong>~1500</strong>写作年跨度</div>
+    </div>
+  </div>
+  <div class="hero-scroll" onclick="document.getElementById('timeline').scrollIntoView({behavior:'smooth'})">
+    ▼ 开始浏览
+  </div>
+</section>
+
+<!-- ═══════ NAV ═══════ -->
+<nav class="nav-bar" id="navbar">
+  <div class="nav-inner" id="nav-inner"></div>
+</nav>
+
+<!-- ═══════ TIMELINE ═══════ -->
+<section class="timeline-section" id="timeline">
+  <div class="timeline-title">救赎历史时间线</div>
+  <div class="timeline-sub">从创世到新创造 · 约主前2000年至主后100年</div>
+  <div class="timeline-track" id="timeline-track"></div>
+</section>
+
+<!-- ═══════ MAIN CONTENT ═══════ -->
+<main id="main-content"></main>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer class="footer">
+  <div class="footer-cross">✟</div>
+  <p>Soli Deo Gloria · 惟独荣耀归于神</p>
+  <p style="margin-top:0.3rem;font-size:0.7rem">圣经六十六卷速览手册</p>
+</footer>
+
+<!-- Back to top -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════
+const SECTIONS = [
+  {
+    id:'torah', title:'摩西五经', subtitle:'Pentateuch / Torah', icon:'📜',
+    color:'#1B4332', gradient:'linear-gradient(135deg,#1B4332,#2D6A4F)',
+    desc:'律法的根基 · 创世至申命 · 5卷',
+    background:'摩西五经写于以色列出埃及至进入应许之地期间（约主前1446–1406年），是整本圣经的根基。在古近东文化背景下，它以盟约的形式（类似赫人条约）确立了耶和华与以色列之间独一无二的关系，奠定了创造、堕落、救赎、圣洁的基本神学框架。',
+    books:[
+      {name:'创世记',eng:'Genesis',ch:50,author:'摩西',date:'约主前1446–1406年',dateShort:'~1400 BC',
+       theme:'万物的起源与恩典之约的开端',
+       verse:'起初，神创造天地。（1:1）',
+       summary:'记载天地万物的创造、人类的堕落、洪水审判、列祖（亚伯拉罕、以撒、雅各、约瑟）的蒙召与立约历史，是救赎历史的序幕。',
+       outline:['1-11 太古历史：创造、堕落、洪水、巴别','12-25 亚伯拉罕之约：蒙召、应许、以撒','26-36 以撒与雅各：传承与试炼','37-50 约瑟叙事：神护理中的救赎预表'],
+       bg:'写于旷野时期。创世记覆盖的历史跨度最长——从创造到约瑟在埃及去世（约主前1805年），与古近东创世神话形成鲜明对照，宣告独一真神的创造主权。'},
+      {name:'出埃及记',eng:'Exodus',ch:40,author:'摩西',date:'约主前1446–1406年',dateShort:'~1400 BC',
+       theme:'救赎与立约——从奴役到敬拜',
+       verse:'我是耶和华你的神，曾将你从埃及地为奴之家领出来。（20:2）',
+       summary:'以色列人在埃及受苦、神兴起摩西、十灾、逾越节、过红海、西奈山立约、颁布律法、建造会幕，确立以色列为圣约子民。',
+       outline:['1-15 拯救：为奴、十灾、逾越节、过红海','16-18 旷野旅程：玛哪、磐石出水','19-24 西奈之约：十诫与律法','25-40 会幕建造：神临在子民中间'],
+       bg:'以色列在埃及为奴约400年后，神在燃烧的荆棘中向摩西显现。出埃及事件（约主前1446年）成为旧约最核心的救赎范式，逾越节羔羊预表基督的献祭。'},
+      {name:'利未记',eng:'Leviticus',ch:27,author:'摩西',date:'约主前1446–1406年',dateShort:'~1400 BC',
+       theme:'圣洁——你们要圣洁，因为我是圣洁的',
+       verse:'你们要圣洁，因为我耶和华你们的神是圣洁的。（19:2）',
+       summary:'圣约子民的敬拜手册：详述五大祭祀、祭司制度、洁净条例、赎罪日、圣洁法典与节期，教导以色列如何在圣洁之神面前生活。',
+       outline:['1-7 五祭条例：燔祭、素祭、平安祭、赎罪祭、赎愆祭','8-10 祭司的设立与事奉','11-15 洁净与不洁净条例','16 赎罪日（Yom Kippur）','17-27 圣洁法典与节期'],
+       bg:'在西奈山颁布，全书以会幕为中心。赎罪日（利16章）是全书的神学高峰，两只山羊的仪式深刻预表基督的代赎与罪的彻底除去。'},
+      {name:'民数记',eng:'Numbers',ch:36,author:'摩西',date:'约主前1446–1406年',dateShort:'~1400 BC',
+       theme:'旷野中的信心试炼与神的信实',
+       verse:'耶和华不轻易发怒，并有丰盛的慈爱。（14:18）',
+       summary:'记载以色列人在旷野漂流四十年的经历：人口统计、行军编制、多次悖逆与审判、巴兰事件，彰显人的失败与神不变的信实。',
+       outline:['1-10 西奈整编：数点人口与行军安排','11-14 悖逆与审判：探子的恶信','15-19 旷野漂流的条例与事件','20-36 从加低斯到摩押平原'],
+       bg:'覆盖约38年旷野漂流（主前1444–1406年）。第一代人因不信倒毙旷野（14章），第二代在摩押平原预备进入应许之地。巴兰的驴和铜蛇事件都成为新约重要引用。'},
+      {name:'申命记',eng:'Deuteronomy',ch:34,author:'摩西',date:'约主前1406年',dateShort:'~1406 BC',
+       theme:'盟约更新——记念、顺服、蒙福',
+       verse:'你要尽心、尽性、尽力爱耶和华你的神。（6:5）',
+       summary:'摩西在约旦河东的三篇告别讲道，回顾历史、重申律法、更新圣约，劝勉新一代以色列人爱神守约，进入应许之地。',
+       outline:['1-4 第一篇讲道：回顾历史','5-26 第二篇讲道：重申律法与爱的诫命','27-28 祝福与咒诅','29-34 第三篇讲道：约的更新与摩西之死'],
+       bg:'摩西120岁在毗斯迦山远眺应许之地后去世。申命记的结构与古近东宗主条约（赫人条约）高度吻合，耶稣在旷野受试探时三次引用本书（6:13,16; 8:3）。'},
+    ]
+  },
+  {
+    id:'history-ot', title:'旧约历史书', subtitle:'Historical Books', icon:'⚔️',
+    color:'#2D6A4F', gradient:'linear-gradient(135deg,#2D6A4F,#40916C)',
+    desc:'圣约国度的兴衰 · 约书亚至以斯帖 · 12卷',
+    background:'从约书亚进入迦南（约主前1406年）到以斯帖的波斯时代（约主前470年），跨越近千年。这段历史见证了以色列从神权政治到君主制的转变、所罗门圣殿的辉煌、王国的分裂、被掳巴比伦，以及归回重建——圣约的祝福与咒诅在历史中真实应验。',
+    books:[
+      {name:'约书亚记',eng:'Joshua',ch:24,author:'约书亚（后人编辑）',date:'约主前1406–1380年',dateShort:'~1400 BC',
+       theme:'信靠神的应许进入应许之地',verse:'你当刚强壮胆！因为你必使这百姓承受那地为业。（1:6）',
+       summary:'记载以色列人在约书亚的带领下渡过约旦河、攻取迦南、分配产业，应许之地的得着彰显神的信实。',
+       outline:['1-5 进入应许之地：渡约旦河','6-12 征服迦南：耶利哥至南北战役','13-21 分配土地与逃城','22-24 约书亚的告别与盟约更新'],
+       bg:'约书亚（希伯来文"耶和华拯救"）的名字正是耶稣的希伯来形式。迦南考古（如耶利哥城墙）与圣经记载存在重要对应。'},
+      {name:'士师记',eng:'Judges',ch:21,author:'不详',date:'约主前1380–1050年',dateShort:'~1380–1050 BC',
+       theme:'循环的悖逆——各人任意而行',verse:'那时以色列中没有王，各人任意而行。（21:25）',
+       summary:'记载从约书亚之后到撒母耳之前，以色列反复堕落、遭受压迫、呼求神、神兴起士师拯救的循环，显明人需要一位永远的君王。',
+       outline:['1-2 征服的失败与士师循环的引言','3-16 十二位士师的事迹','17-21 道德崩溃的两个附录'],
+       bg:'约300年的黑暗时期，出现了底波拉、基甸、参孙等著名士师。全书呈明显的下降螺旋，为王国的建立铺设背景。'},
+      {name:'路得记',eng:'Ruth',ch:4,author:'不详',date:'士师时期',dateShort:'~1100 BC',
+       theme:'恩典中的救赎——至近亲属的爱',verse:'你的国就是我的国，你的神就是我的神。（1:16）',
+       summary:'士师时代的一抹亮光：摩押女子路得跟随拿俄米归回伯利恒，蒙波阿斯救赎，成为大卫的曾祖母，编入弥赛亚家谱。',
+       outline:['1 拿俄米的苦境与路得的忠诚','2 路得在波阿斯田间拾穗','3 禾场之夜：求赎','4 波阿斯的救赎与大卫家谱'],
+       bg:'至近亲属（גֹּאֵל，go\'el）的制度是本书核心，波阿斯作为go\'el预表基督作我们的救赎主。路得是马太福音耶稣家谱中四位女性之一。'},
+      {name:'撒母耳记上',eng:'1 Samuel',ch:31,author:'撒母耳等',date:'约主前1050–1010年',dateShort:'~1050 BC',
+       theme:'从士师到君王——神立膏立之王',verse:'听命胜于献祭。（15:22）',
+       summary:'记载撒母耳兴起、以色列立王、扫罗被弃、大卫蒙选与逃亡，展现人选之王与神选之王的对比。',
+       outline:['1-7 撒母耳：末代士师与先知','8-15 扫罗王朝：民意之王的失败','16-31 大卫的兴起与逃亡'],
+       bg:'约主前1050年，以色列从神权政治转向君主制。扫罗是以色列联合王国的第一位国王，但因悖逆被弃。撒母耳膏立大卫约在主前1025年。'},
+      {name:'撒母耳记下',eng:'2 Samuel',ch:24,author:'宫廷史官',date:'约主前1010–970年',dateShort:'~1010 BC',
+       theme:'大卫之约——永远的国度应许',verse:'你的家和你的国必在我面前永远坚立。（7:16）',
+       summary:'记载大卫统一王国、迎回约柜、得着永约，也记载他的犯罪与家庭悲剧，显明恩典中的管教。',
+       outline:['1-10 大卫的兴盛：统一、约柜、大卫之约','11-12 大卫的犯罪与悔改','13-20 家庭纷争与押沙龙叛变','21-24 附录：诗歌与勇士'],
+       bg:'撒母耳记下7章的大卫之约是救赎历史的关键枢纽——"你的后裔……我要坚定他的国位直到永远"，这应许最终在基督身上成全。'},
+      {name:'列王纪上',eng:'1 Kings',ch:22,author:'不详',date:'约主前970–853年',dateShort:'~970 BC',
+       theme:'国度的辉煌与分裂',verse:'你若效法你父亲大卫……我就必坚固你的国位。（9:4-5）',
+       summary:'记载所罗门的智慧与建殿、王国分裂为南北两国、以利亚先知的事迹，以顺服与悖逆的对比贯穿始终。',
+       outline:['1-11 所罗门：智慧、建殿与堕落','12-16 王国分裂：南北诸王','17-22 以利亚与亚哈王的冲突'],
+       bg:'所罗门圣殿约于主前966年建成，是古代世界最辉煌的宗教建筑之一。主前930年王国分裂为北国以色列（十支派）和南国犹大（两支派）。'},
+      {name:'列王纪下',eng:'2 Kings',ch:25,author:'不详',date:'约主前853–586年',dateShort:'~853 BC',
+       theme:'圣约咒诅的应验——国破家亡',verse:'耶和华从以色列面前赶出他们。（17:20）',
+       summary:'记载以利沙事工、北国亡于亚述（主前722年）、南国亡于巴比伦（主前586年），申命记的咒诅应验。',
+       outline:['1-8 以利沙的事工','9-17 北国末路：亡于亚述','18-20 希西家的复兴','21-25 南国衰亡：被掳巴比伦'],
+       bg:'两个关键年份：主前722年亚述灭北国以色列，主前586年巴比伦王尼布甲尼撒摧毁耶路撒冷和圣殿。这些事件深刻塑造了犹太民族的集体记忆。'},
+      {name:'历代志上',eng:'1 Chronicles',ch:29,author:'以斯拉（传统）',date:'被掳归回时期',dateShort:'~450 BC',
+       theme:'从神学视角回顾大卫王朝的荣耀',verse:'耶和华啊，国度是你的。（29:11）',
+       summary:'从家谱开始重述以色列历史，聚焦大卫预备建殿、组织敬拜事奉，为归回的子民重建身份认同。',
+       outline:['1-9 家谱：从亚当到被掳归回','10-12 大卫登基与统一','13-16 迎回约柜与敬拜','17-29 大卫之约与预备建殿'],
+       bg:'写于被掳归回后（约主前450年），为归回的小群余民提供神学视角的历史回顾，强调圣殿敬拜的重要性，重建以大卫之约为核心的盼望。'},
+      {name:'历代志下',eng:'2 Chronicles',ch:36,author:'以斯拉（传统）',date:'被掳归回时期',dateShort:'~450 BC',
+       theme:'圣殿敬拜的兴废与复兴的盼望',verse:'这称为我名下的子民，若是自卑、祷告……我必医治他们的地。（7:14）',
+       summary:'聚焦所罗门建殿及南国犹大历代君王，以敬拜是否忠心为评判标准，末了以居鲁士归回谕旨结束。',
+       outline:['1-9 所罗门：建殿与辉煌','10-36 南国诸王：复兴与衰落交替','36:22-23 居鲁士谕旨：归回的盼望'],
+       bg:'全书以波斯王居鲁士的谕旨结束（主前538年），开启归回时代。这道谕旨已在居鲁士圆柱（大英博物馆藏品）中得到考古印证。'},
+      {name:'以斯拉记',eng:'Ezra',ch:10,author:'以斯拉',date:'约主前538–458年',dateShort:'~538 BC',
+       theme:'归回与重建——圣殿复兴',verse:'以斯拉定志考究遵行耶和华的律法。（7:10）',
+       summary:'记载两次归回：所罗巴伯领导重建圣殿、以斯拉带领属灵改革与洁净婚姻，恢复以律法为中心的生活。',
+       outline:['1-6 第一次归回：所罗巴伯重建圣殿','7-10 第二次归回：以斯拉的属灵改革'],
+       bg:'第二圣殿于主前516年完成（比第一圣殿小得多）。以斯拉于主前458年带领第二批归回，他是一位学者、祭司和改革家，被犹太传统誉为"第二摩西"。'},
+      {name:'尼希米记',eng:'Nehemiah',ch:13,author:'尼希米',date:'约主前445–425年',dateShort:'~445 BC',
+       theme:'重建城墙、重建社群',verse:'我们的神必为我们争战。（4:20）',
+       summary:'尼希米从波斯王的酒政返回耶路撒冷重建城墙，在内忧外患中52天完成工程，并配合以斯拉推动圣约更新。',
+       outline:['1-2 尼希米的使命：祷告与出发','3-7 重建城墙：52天的抗争','8-10 宣读律法与圣约更新','11-13 人口安置与后续改革'],
+       bg:'主前445年，尼希米以波斯王亚达薛西一世的酒政身份归回。城墙52天建成。尼希米记8章的律法宣读场景是圣经中最感人的敬拜聚会之一。'},
+      {name:'以斯帖记',eng:'Esther',ch:10,author:'不详',date:'约主前480年代',dateShort:'~480 BC',
+       theme:'隐藏的护理——神在幕后的保守',verse:'焉知你得了王后的位分，不是为现今的机会吗？（4:14）',
+       summary:'犹太少女以斯帖成为波斯王后，挫败哈曼灭绝犹太人的阴谋。全书虽未提"神"字，却处处彰显神的护理。',
+       outline:['1-2 以斯帖被立为王后','3-4 哈曼的阴谋与末底改的呼吁','5-7 以斯帖的策略与哈曼的败落','8-10 犹太人的拯救与普珥节'],
+       bg:'发生在波斯王薛西斯一世（亚哈随鲁）统治期间（主前486–465年）。全书未提及神的名字，却是圣经中最精妙的护理神学叙事。普珥节至今是犹太重要节日。'},
+    ]
+  },
+  {
+    id:'poetry', title:'诗歌智慧书', subtitle:'Poetry & Wisdom', icon:'🎵',
+    color:'#5B3A8C', gradient:'linear-gradient(135deg,#5B3A8C,#7B52AB)',
+    desc:'圣约生活的经验与默想 · 5卷',
+    background:'这五卷书代表了以色列的敬拜传统和智慧传统。诗篇是以色列的敬拜诗集（圣殿赞美诗），箴言和传道书属于古近东智慧文学传统，约伯记探讨苦难的奥秘，雅歌颂扬圣约之爱。它们教导圣约子民如何在日常生活中信靠神、敬拜神、面对人生的喜乐与痛苦。',
+    books:[
+      {name:'约伯记',eng:'Job',ch:42,author:'不详',date:'列祖时期（？）',dateShort:'~2000? BC',
+       theme:'义人受苦与神的主权',verse:'我从前风闻有你，现在亲眼看见你。（42:5）',
+       summary:'义人约伯在极端苦难中与三友辩论，神最终从旋风中启示自己的主权和智慧，约伯因亲见神而得安慰。',
+       outline:['1-2 序幕：天上的场景与约伯的苦难','3-31 约伯与三友的辩论（三轮）','32-37 以利户的讲论','38-41 神从旋风中的回答','42 约伯的悔悟与复兴'],
+       bg:'约伯记可能是圣经中最古老的书之一，场景设于乌斯地（可能在以东附近）。它以戏剧性的对话体探讨因果报应论的局限，直指十字架神学的核心——义人受苦。'},
+      {name:'诗篇',eng:'Psalms',ch:150,author:'大卫等多位作者',date:'约主前1000–400年',dateShort:'~1000–400 BC',
+       theme:'以色列的祷告与赞美——圣约子民的心声',verse:'耶和华是我的牧者，我必不至缺乏。（23:1）',
+       summary:'150篇诗歌构成以色列的敬拜诗集，涵盖赞美、哀叹、感恩、忏悔、智慧、弥赛亚预言等主题，分为五卷呼应五经。',
+       outline:['卷一（1-41）大卫诗集：个人信靠','卷二（42-72）可拉/大卫诗集：国度','卷三（73-89）亚萨诗集：圣殿敬拜','卷四（90-106）耶和华作王','卷五（107-150）哈利路亚诗集'],
+       bg:'跨越约600年写成，至少7位作者。希伯来名"Tehillim"意为"赞美"。诗篇是新约引用最多的旧约书卷，弥赛亚诗篇（如2、22、110篇）在基督身上得到成全。'},
+      {name:'箴言',eng:'Proverbs',ch:31,author:'所罗门等',date:'约主前950年',dateShort:'~950 BC',
+       theme:'敬畏耶和华是智慧的开端',verse:'敬畏耶和华是智慧的开端。（9:10）',
+       summary:'圣约生活的实践智慧，以父训子的形式教导在家庭、工作、言语、财务等日常领域中行走智慧之路。',
+       outline:['1-9 智慧的呼召：智慧女士与愚昧妇人','10-22:16 所罗门箴言集','22:17-24:34 智慧人的言语','25-29 希西家人所誊录的箴言','30-31 亚古珥、利慕伊勒箴言（含才德妇人）'],
+       bg:'所罗门据说写了三千句箴言（王上4:32）。以色列的智慧传统与古近东智慧文学（如埃及的阿门涅摩佩训言）有相似之处，但以敬畏耶和华为根本区别。'},
+      {name:'传道书',eng:'Ecclesiastes',ch:12,author:'所罗门',date:'约主前935年',dateShort:'~935 BC',
+       theme:'日光之下的虚空与日光之上的智慧',verse:'虚空的虚空，凡事都是虚空。（1:2）',
+       summary:'传道者审视人生的劳碌、享乐、智慧、不公，揭示离了神一切皆为虚空，引向敬畏神守诫命的结论。',
+       outline:['1-2 传道者的探索：智慧、享乐、劳碌','3-5 时间、不公与敬拜','6-8 人生的困惑与限制','9-12 面对死亡的智慧与结论'],
+       bg:'希伯来名"Qoheleth"意为"召集者/传道者"。本书常被误读为悲观主义，实际上是在人生终极追问中引人归向创造主——"敬畏神，谨守他的诫命，这是人所当尽的本分"（12:13）。'},
+      {name:'雅歌',eng:'Song of Songs',ch:8,author:'所罗门',date:'约主前960年',dateShort:'~960 BC',
+       theme:'圣约之爱的美丽与力量',verse:'爱情如死之坚强……是耶和华的烈焰。（8:6）',
+       summary:'以婚姻之爱的诗歌颂扬圣约中忠贞、热烈的爱情，在正典中既肯定受造之美，也预表基督与教会的爱。',
+       outline:['1:1-2:7 相爱的开始与倾慕','2:8-3:5 春天的邀请与寻觅','3:6-5:1 婚礼与圆满的结合','5:2-8:14 爱的试炼、成熟与坚固'],
+       bg:'希伯来标题"歌中之歌"（שִׁיר הַשִּׁירִים）表示"最好的歌"。犹太传统在逾越节诵读，以之比喻神与以色列的爱。改革宗传统在字面与预表层面并重解释。'},
+    ]
+  },
+  {
+    id:'major-prophets', title:'大先知书', subtitle:'Major Prophets', icon:'🔥',
+    color:'#9B2226', gradient:'linear-gradient(135deg,#9B2226,#AE2012)',
+    desc:'审判与救赎的宣告 · 5卷',
+    background:'大先知书涵盖从主前8世纪到被掳时期。先知们在王国衰落、被掳巴比伦的历史背景中宣讲，一方面宣告因背约而来的审判，另一方面带出新约（耶31:31）、受苦仆人（赛53）、新心（结36:26）、人子国度（但7:13）等伟大的弥赛亚应许。',
+    books:[
+      {name:'以赛亚书',eng:'Isaiah',ch:66,author:'以赛亚',date:'约主前740–680年',dateShort:'~740 BC',
+       theme:'以色列的圣者——审判与新创造的异象',verse:'他为我们的过犯受害，为我们的罪孽压伤。（53:5）',
+       summary:'旧约最伟大的预言书之一，前半论审判，后半论安慰与救赎，包含受苦仆人之歌与新天新地异象，被称为"第五福音书"。',
+       outline:['1-12 审判与以马内利的应许','13-23 列国的审判神谕','24-27 以赛亚小启示录','28-35 六祸与将来的救恩','36-39 历史间奏：希西家','40-55 安慰之书：仆人之歌','56-66 将来的荣耀与新创造'],
+       bg:'以赛亚在乌西雅王崩年（主前740年）蒙召。他经历了亚述帝国的威胁（主前701年围攻耶路撒冷），66章的结构恰好呼应圣经66卷——前39章对应旧约（审判），后27章对应新约（安慰）。'},
+      {name:'耶利米书',eng:'Jeremiah',ch:52,author:'耶利米',date:'约主前626–586年',dateShort:'~626 BC',
+       theme:'流泪先知的控诉与新约的应许',verse:'我要与以色列家和犹大家另立新约。（31:31）',
+       summary:'耶利米在南国灭亡前后四十年忠心宣讲审判与悔改的信息，遭遇极大逼迫，却带出新约（31:31-34）的伟大应许。',
+       outline:['1-6 先知蒙召与初期信息','7-20 圣殿讲道与哀歌','21-29 对王室和假先知的审判','30-33 安慰之书：新约应许','34-45 耶路撒冷陷落前后','46-52 列国审判与耶路撒冷沦陷'],
+       bg:'耶利米从约西亚改革时期开始事奉（主前626年），亲历圣殿和耶路撒冷的毁灭（主前586年）。他被称为"流泪的先知"，一生遭受监禁、枯井、流亡。31:31-34的新约应许是旧约中最重要的弥赛亚预言之一。'},
+      {name:'耶利米哀歌',eng:'Lamentations',ch:5,author:'耶利米',date:'约主前586年',dateShort:'~586 BC',
+       theme:'圣城沦陷的哀恸与信心的盼望',verse:'我们不至消灭，是出于耶和华诸般的慈爱。（3:22）',
+       summary:'以五首精心编排的哀诗哀悼耶路撒冷的毁灭，在极深的哀痛中仍抓住神信实的盼望。',
+       outline:['1 锡安的孤寂——被遗弃的城','2 神的忿怒——审判的描述','3 先知的哀叹与盼望（核心）','4 锡安今昔的对比','5 归回的祈祷'],
+       bg:'五首哀歌中四首是离合体诗（按希伯来22字母排列），体现了哀痛中的秩序。第三章66节正是全书的中心——"耶和华的慈爱永不断绝，他的怜悯不至断绝，每早晨都是新的"。'},
+      {name:'以西结书',eng:'Ezekiel',ch:48,author:'以西结',date:'约主前593–571年',dateShort:'~593 BC',
+       theme:'神的荣耀——离开与归回',verse:'我必将新灵放在你们里面。（36:26）',
+       summary:'被掳巴比伦的祭司先知以西结蒙异象宣告审判、应许复兴，核心主题是神荣耀的离去与归回，包含枯骨复活和新圣殿异象。',
+       outline:['1-3 先知蒙召与神荣耀的异象','4-24 审判犹大：荣耀离开圣殿','25-32 列国的审判','33-39 复兴的应许：枯骨复活','40-48 新圣殿与新耶路撒冷'],
+       bg:'以西结于主前597年随第一批被掳者到巴比伦，在迦巴鲁河边蒙召。他的异象充满象征——活物、飞转的轮子、枯骨复活的山谷（37章）。40-48章的新圣殿异象是旧约末世论的高峰。'},
+      {name:'但以理书',eng:'Daniel',ch:12,author:'但以理',date:'约主前605–530年',dateShort:'~605 BC',
+       theme:'万王之王——神在列国中掌权',verse:'有一位像人子的，驾着天云而来。（7:13）',
+       summary:'前半为叙事（火窑、狮坑），后半为启示文学（异象），宣告地上帝国兴衰，但神的国度终必得胜。',
+       outline:['1-6 叙事：宫廷考验与神的护理','7-8 四兽异象与人子的国度','9 但以理的祷告与七十个七','10-12 末后的异象与复活的盼望'],
+       bg:'但以理约在主前605年被掳至巴比伦，经历了巴比伦和波斯两个帝国。2章与7章的四个帝国异象（巴比伦、波斯、希腊、罗马）构成了两约之间历史的预言框架。耶稣自称"人子"正出自但以理书7:13。'},
+    ]
+  },
+  {
+    id:'minor-prophets', title:'小先知书', subtitle:'Minor Prophets', icon:'📢',
+    color:'#CA6702', gradient:'linear-gradient(135deg,#CA6702,#E09F3E)',
+    desc:'十二位先知的信息 · 12卷',
+    background:'在希伯来正典中合为一卷，称为"十二先知书"。"小"指篇幅较短，非重要性较低。这十二位先知从主前8世纪延续到主前5世纪，在北国灭亡前后、南国被掳前后、归回重建时期分别发出神的声音——审判罪恶、呼唤悔改、应许弥赛亚国度的来临。',
+    books:[
+      {name:'何西阿书',eng:'Hosea',ch:14,author:'何西阿',date:'约主前750–715年',dateShort:'~750 BC',
+       theme:'不变的圣约之爱',verse:'我必聘你永远归我为妻。（2:19）',
+       summary:'先知以自身婚姻的悲剧比喻以色列对神的不忠，宣告审判后神仍以不变的爱寻回背约的子民。',
+       outline:['1-3 何西阿的婚姻：活的比喻','4-10 以色列的罪行与审判','11-14 神不变的爱与归回的呼召'],
+       bg:'何西阿在北国以色列事奉，亲历其灭亡前的腐败。神要他娶淫妇歌蔑，以破碎的婚姻作为活的讲道——神对背约之民的爱何等坚忍。'},
+      {name:'约珥书',eng:'Joel',ch:3,author:'约珥',date:'不确定',dateShort:'~835? BC',
+       theme:'耶和华的日子与圣灵浇灌',verse:'以后，我要将我的灵浇灌凡有血气的。（2:28）',
+       summary:'以蝗灾为引子宣告耶和华大而可畏的日子，呼召悔改，应许圣灵浇灌万民。',
+       outline:['1 蝗灾的描述与哀叹','2:1-17 耶和华的日子与悔改呼召','2:18-32 复兴与圣灵浇灌的应许','3 列国受审与锡安蒙福'],
+       bg:'2:28-32的圣灵浇灌预言在五旬节应验（徒2:16-21），彼得引用约珥书宣告末后时代已经开始。'},
+      {name:'阿摩司书',eng:'Amos',ch:9,author:'阿摩司',date:'约主前760年',dateShort:'~760 BC',
+       theme:'公义如大水',verse:'惟愿公平如大水滚滚，使公义如江河滔滔。（5:24）',
+       summary:'牧人出身的先知向北国以色列宣告审判，斥责剥削穷人、虚假敬拜，呼唤真正的公义。',
+       outline:['1-2 列国与以色列的审判神谕','3-6 三篇控诉讲道','7-9:10 五个审判异象','9:11-15 大卫帐幕的复兴'],
+       bg:'阿摩司是提哥亚的牧羊人和修剪桑树的农夫，在北国繁荣鼎盛时期（耶罗波安二世治下）宣告审判。他的社会正义呼声至今影响深远。'},
+      {name:'俄巴底亚书',eng:'Obadiah',ch:1,author:'俄巴底亚',date:'约主前586年后',dateShort:'~586 BC',
+       theme:'以东的审判——骄傲必被降卑',verse:'国度就归耶和华了。（21节）',
+       summary:'旧约最短的书，宣告以东因骄傲和在犹大被毁时幸灾乐祸而遭受审判。',
+       outline:['1-9 以东骄傲的审判','10-14 以东的罪状','15-21 耶和华的日子与国度'],
+       bg:'以东是以扫的后裔，与以色列有血缘关系。以东人在耶路撒冷陷落时趁火打劫，俄巴底亚宣告其必遭报应——以东后来确实在历史中消亡。'},
+      {name:'约拿书',eng:'Jonah',ch:4,author:'约拿',date:'约主前760年',dateShort:'~760 BC',
+       theme:'神的怜悯不限于以色列',verse:'你这么发怒合乎理吗？（4:4）',
+       summary:'先知约拿抗拒差遣、遭鱼吞吐、终去尼尼微、全城悔改，但约拿却因神的怜悯而发怒。',
+       outline:['1 约拿的逃跑与风暴','2 鱼腹中的祷告','3 尼尼微的悔改','4 约拿的愤怒与神的教训'],
+       bg:'亚述帝国首都尼尼微是古代世界最大的城市之一。约拿三天三夜在鱼腹中，耶稣以此预表自己的埋葬与复活（太12:40）。'},
+      {name:'弥迦书',eng:'Micah',ch:7,author:'弥迦',date:'约主前735–700年',dateShort:'~735 BC',
+       theme:'行公义、好怜悯、与神同行',verse:'世人哪，耶和华已指示你何为善。（6:8）',
+       summary:'与以赛亚同时代，控诉社会不公与偶像崇拜，预言弥赛亚生于伯利恒。',
+       outline:['1-2 审判的宣告','3-5 领袖败坏与弥赛亚应许','6-7 神的控诉与怜悯的胜利'],
+       bg:'弥迦5:2精确预言弥赛亚将生于伯利恒以法他——这正是希律向祭司长询问基督出生地时得到的回答（太2:5-6）。'},
+      {name:'那鸿书',eng:'Nahum',ch:3,author:'那鸿',date:'约主前650年',dateShort:'~650 BC',
+       theme:'尼尼微的末日',verse:'耶和华不轻易发怒，大有能力。（1:3）',
+       summary:'宣告亚述帝国首都尼尼微的覆灭，彰显神的公义审判。',
+       outline:['1 神的威严与忿怒','2 尼尼微城沦陷','3 罪行与不可挽回的结局'],
+       bg:'约拿宣讲后约150年，尼尼微再次堕落。主前612年，巴比伦和玛代联军攻陷尼尼微，那鸿的预言精确应验。'},
+      {name:'哈巴谷书',eng:'Habakkuk',ch:3,author:'哈巴谷',date:'约主前608–598年',dateShort:'~605 BC',
+       theme:'义人必因信得生',verse:'义人必因信得生。（2:4）',
+       summary:'先知向神质问恶人为何亨通，最终从质问走向信靠，以赞美的祷告结束。',
+       outline:['1 先知的质问','2 神的回答：义人因信得生','3 先知的祷告与赞美诗'],
+       bg:'2:4"义人必因信得生"是保罗在罗马书（1:17）和加拉太书（3:11）论证因信称义的关键旧约经文，也是宗教改革的核心经文。'},
+      {name:'西番雅书',eng:'Zephaniah',ch:3,author:'西番雅',date:'约主前630年',dateShort:'~630 BC',
+       theme:'耶和华大日的审判与余民的拯救',verse:'耶和华你的神在你中间……他必因你欢欣喜乐。（3:17）',
+       summary:'在约西亚改革前后宣告全面审判，但结尾应许神必为余民欢呼歌唱。',
+       outline:['1 对犹大的审判','2 对列国的审判','3:1-8 对耶路撒冷的控诉','3:9-20 余民的拯救与神的欢歌'],
+       bg:'西番雅是王室后裔（希西家的玄孙）。3:17是旧约中最温柔的经文之一——全能之神竟然因他的子民"欢欣喜乐"并"默然爱你"。'},
+      {name:'哈该书',eng:'Haggai',ch:2,author:'哈该',date:'主前520年',dateShort:'520 BC',
+       theme:'先建神的殿',verse:'你们要省察自己的行为。（1:7）',
+       summary:'归回后圣殿重建停滞十多年，哈该以四篇讲道激励百姓恢复建殿。',
+       outline:['1 先建神殿的呼召','2:1-9 末后殿的荣耀','2:10-19 洁净与祝福','2:20-23 所罗巴伯的应许'],
+       bg:'主前520年，圣殿重建已停滞16年。哈该和撒迦利亚联手激励百姓恢复工程，第二圣殿于主前516年完工。'},
+      {name:'撒迦利亚书',eng:'Zechariah',ch:14,author:'撒迦利亚',date:'约主前520–480年',dateShort:'~520 BC',
+       theme:'弥赛亚国度的异象',verse:'看哪，你的王来到你这里！……谦谦和和地骑着驴。（9:9）',
+       summary:'最具弥赛亚色彩的小先知书，前半以八个夜间异象鼓励建殿，后半预言弥赛亚的来临、受难与再来。',
+       outline:['1-6 八个夜间异象','7-8 禁食的意义','9-11 弥赛亚的第一次来临','12-14 弥赛亚的再来与国度'],
+       bg:'本书的弥赛亚预言在新约中大量应验：骑驴进城（9:9→太21:5）、被出卖三十块银子（11:12-13→太27:9）、被扎的那位（12:10→约19:37）。'},
+      {name:'玛拉基书',eng:'Malachi',ch:4,author:'玛拉基',date:'约主前460–430年',dateShort:'~430 BC',
+       theme:'旧约的最后呼声',verse:'我要差遣我的使者在我前面预备道路。（3:1）',
+       summary:'旧约最后一卷，以问答体斥责归回后子民的灵性冷淡，预告以利亚再来与弥赛亚的日子。',
+       outline:['1:1-5 神的爱','1:6-2:9 祭司的败坏','2:10-16 婚约的不忠','2:17-3:5 公义的太阳','3:6-12 什一奉献','3:13-4:6 末后审判与以利亚'],
+       bg:'玛拉基之后，是约400年的"沉默期"（两约之间），直到施洗约翰出现——他正是玛拉基预言的"以利亚"（太11:14），为弥赛亚预备道路。'},
+    ]
+  },
+  {
+    id:'gospels', title:'四福音书', subtitle:'The Gospels', icon:'✝️',
+    color:'#0A3D62', gradient:'linear-gradient(135deg,#0A3D62,#1B6CA8)',
+    desc:'基督的降临与成全 · 4卷',
+    background:'四福音书从四个不同视角见证同一位耶稣基督：马太写给犹太人（弥赛亚君王）、马可面向罗马人（受苦仆人）、路加面向希腊人（完美的人子）、约翰面向所有人（神的儿子）。它们写于主后50–95年间，是基督教信仰的根基文献，记载了人类历史上最核心的事件——道成肉身、十字架与复活。',
+    books:[
+      {name:'马太福音',eng:'Matthew',ch:28,author:'马太（利未）',date:'约主后50–70年',dateShort:'~55 AD',
+       theme:'耶稣是弥赛亚君王',verse:'天上地下所有的权柄都赐给我了。（28:18）',
+       summary:'以犹太读者为对象，大量引用旧约预言，呈现耶稣为大卫之子、亚伯拉罕之后裔、应许的弥赛亚君王。',
+       outline:['1-2 弥赛亚的降生与家谱','3-4 受洗、受试探','5-7 登山宝训：天国宪章','8-10 十个神迹与差遣十二使徒','11-13 反对与天国比喻','14-20 门徒训练之路','21-25 最后一周','26-28 受难、复活与大使命'],
+       bg:'马太（又名利未）原是税吏。全书引用旧约约60次，"应验"一词出现约16次。登山宝训（5-7章）是基督伦理教导的核心文献。'},
+      {name:'马可福音',eng:'Mark',ch:16,author:'马可',date:'约主后55–65年',dateShort:'~60 AD',
+       theme:'受苦仆人的行动福音',verse:'人子来……要舍命作多人的赎价。（10:45）',
+       summary:'最短最紧凑的福音书，强调耶稣的行动与受苦，"立刻"（εὐθύς）出现约40次，呈现基督作为受苦的仆人。',
+       outline:['1:1-13 预备：受洗与受试探','1:14-8:26 加利利事工','8:27-10:52 三次预言受死','11-13 耶路撒冷最后一周','14-16 受难与复活'],
+       bg:'早期教父帕皮亚记载马可是彼得的翻译员，本福音书反映了彼得的见证。一般认为是最早成书的福音书，写作于罗马，面向罗马读者。'},
+      {name:'路加福音',eng:'Luke',ch:24,author:'路加',date:'约主后58–63年',dateShort:'~60 AD',
+       theme:'人子——寻找拯救失丧的人',verse:'人子来，为要寻找、拯救失丧的人。（19:10）',
+       summary:'历史学家路加的严谨记述，特别关注边缘人群（穷人、妇女、外邦人、罪人），呈现耶稣为全人类的救主。',
+       outline:['1-2 降生叙事','3-4:13 家谱、受洗与受试探','4:14-9:50 加利利事工','9:51-19:27 赴耶路撒冷的旅程','19:28-21:38 耶路撒冷事工','22-24 受难、复活与升天'],
+       bg:'路加是外邦人医生，保罗的同工。他的福音书是新约中最长的书卷，包含大量独有材料：好撒玛利亚人、浪子回头、十架上的强盗等经典叙事。'},
+      {name:'约翰福音',eng:'John',ch:21,author:'使徒约翰',date:'约主后85–95年',dateShort:'~90 AD',
+       theme:'道成肉身——信耶稣得永生',verse:'神爱世人，甚至将他的独生子赐给他们。（3:16）',
+       summary:'补充性福音，以七个神迹（记号）和七个"我是"宣言呈现耶稣的神性，引人信耶稣是基督、是神的儿子。',
+       outline:['1:1-18 序言：太初有道','1:19-12:50 记号之书：七个神迹','13-17 楼上讲论与大祭司祷告','18-19 受难叙事','20-21 复活显现与使命'],
+       bg:'约翰福音90%以上的材料是其他福音书没有的。七个"我是"宣言（生命的粮、世界的光、好牧人等）呼应出埃及记中神的自我启示"我是自有永有的"（出3:14）。'},
+    ]
+  },
+  {
+    id:'acts', title:'新约历史书', subtitle:'Acts of the Apostles', icon:'🌍',
+    color:'#1A5276', gradient:'linear-gradient(135deg,#1A5276,#2E86C1)',
+    desc:'教会的诞生与扩展 · 1卷',
+    background:'使徒行传是路加福音的续篇，记载从基督升天（主后30年）到保罗在罗马传道（约主后62年）约30年间，福音从耶路撒冷一个犹太小群体扩展到罗马帝国各地的历史。圣灵是这部历史的真正主角——五旬节的火焰点燃了教会，使之突破犹太、文化和地理的壁垒。',
+    books:[
+      {name:'使徒行传',eng:'Acts',ch:28,author:'路加',date:'约主后62年',dateShort:'~62 AD',
+       theme:'圣灵引导下福音从耶路撒冷到地极',verse:'圣灵降临在你们身上，你们就必得着能力……直到地极，作我的见证。（1:8）',
+       summary:'记载五旬节圣灵降临、教会建立、彼得与保罗的事工、福音突破文化壁垒向外邦人传开的历史。',
+       outline:['1-7 耶路撒冷教会：五旬节','8-12 犹太与撒玛利亚','13-14 保罗第一次宣教旅程','15 耶路撒冷大会','16-18 第二次宣教旅程','19-21 第三次宣教旅程','22-28 保罗被囚与赴罗马'],
+       bg:'1:8是全书纲要：耶路撒冷（1-7章）→犹太和撒玛利亚（8-12章）→地极（13-28章）。保罗三次宣教旅程建立了从安提阿到罗马的教会网络，改变了世界历史。'},
+    ]
+  },
+  {
+    id:'paul', title:'保罗书信', subtitle:'Pauline Epistles', icon:'✉️',
+    color:'#6C3483', gradient:'linear-gradient(135deg,#6C3483,#8E44AD)',
+    desc:'福音的教义与生活 · 13卷',
+    background:'保罗书信写于约主后49–67年间，从最早的加拉太书到殉道前的提摩太后书。保罗（原名扫罗）从逼迫教会的法利赛人转变为外邦人的使徒，他的书信建立了基督教神学的教义框架：因信称义、与基督联合、圣灵的内住、教会论、末世论——这些真理在宗教改革中被重新发现，至今塑造着教会的信仰。',
+    books:[
+      {name:'罗马书',eng:'Romans',ch:16,author:'保罗',date:'约主后57年',dateShort:'~57 AD',
+       theme:'因信称义——福音的系统阐述',verse:'义人必因信得生。（1:17）',
+       summary:'保罗最系统的神学论述：从人的罪性到因信称义、成圣、拣选恩典、以色列的未来，再到生活中的顺服与爱。',
+       outline:['1-3 世人都犯了罪','3:21-5 因信称义','6-8 与基督联合：成圣、圣灵、荣耀','9-11 以色列与神的拣选','12-16 福音的伦理生活'],
+       bg:'写于哥林多，在第三次宣教旅程末期。罗马书被誉为"基督教神学的宪章"，是奥古斯丁归信、路德宗教改革、卫斯理心被"奇妙温暖"的关键文献。'},
+      {name:'哥林多前书',eng:'1 Corinthians',ch:16,author:'保罗',date:'约主后55年',dateShort:'~55 AD',
+       theme:'十字架的智慧——教会秩序与合一',verse:'我曾定了主意……只知道耶稣基督并他钉十字架。（2:2）',
+       summary:'针对哥林多教会的分裂、淫乱、诉讼、偶像、恩赐滥用等问题，以十字架的智慧一一回应。',
+       outline:['1-4 分裂与十字架智慧','5-6 道德问题','7-10 婚姻、自由与偶像','11-14 敬拜秩序与恩赐','15 复活的教义','16 最后嘱咐'],
+       bg:'哥林多是罗马帝国最繁华堕落的城市之一。13章的爱之颂歌和15章的复活论证是全书最广为人知的段落。'},
+      {name:'哥林多后书',eng:'2 Corinthians',ch:13,author:'保罗',date:'约主后55–56年',dateShort:'~56 AD',
+       theme:'在软弱中显出刚强',verse:'我的恩典够你用的，因为我的能力是在人的软弱上显得完全。（12:9）',
+       summary:'保罗最个人化的书信，为使徒职分辩护，论述苦难中的安慰、慷慨奉献与在软弱中的刚强。',
+       outline:['1-7 使徒事工：苦难与安慰','8-9 慷慨奉献的恩典','10-13 使徒权柄与软弱的夸口'],
+       bg:'可能是保罗在极大的眼泪和心痛中写成（2:4），反映了他与哥林多教会之间复杂而深切的牧养关系。'},
+      {name:'加拉太书',eng:'Galatians',ch:6,author:'保罗',date:'约主后49年',dateShort:'~49 AD',
+       theme:'基督释放了我们',verse:'基督释放了我们，叫我们得以自由。（5:1）',
+       summary:'保罗激烈驳斥律法主义，捍卫因信称义的纯正福音，论证信徒在基督里的自由与圣灵中的新生活。',
+       outline:['1-2 自传性辩护','3-4 因信称义（非因律法）','5-6 自由与圣灵的果子'],
+       bg:'可能是保罗最早的书信，写于耶路撒冷大会前后。路德称加拉太书为"我的凯特琳"（他妻子的名字），视之为自己最亲爱的书卷。'},
+      {name:'以弗所书',eng:'Ephesians',ch:6,author:'保罗',date:'约主后60–62年',dateShort:'~61 AD',
+       theme:'在基督里的丰盛——教会是基督的身体',verse:'你们得救是本乎恩，也因着信。（2:8）',
+       summary:'最宏大的教会论，论述信徒在基督里的属灵福气、教会的合一与成长、家庭秩序与属灵争战。',
+       outline:['1 在基督里的属灵福气','2 恩典中的救赎与合一','3 教会的奥秘','4:1-16 教会的合一与成长','4:17-5:21 新人的生活','5:22-6:9 家庭秩序','6:10-24 属灵的全副军装'],
+       bg:'狱中书信之一（罗马监狱）。1:3-14的颂赞是新约中最长的希腊语单句之一，涵盖了三一神在救赎中的全部工作。'},
+      {name:'腓立比书',eng:'Philippians',ch:4,author:'保罗',date:'约主后61年',dateShort:'~61 AD',
+       theme:'在基督里的喜乐',verse:'你们要靠主常常喜乐！（4:4）',
+       summary:'保罗在监狱中写给最亲密教会的"喜乐书信"，以基督虚己的榜样劝勉合一谦卑。',
+       outline:['1 捆锁中的喜乐','2 基督的虚己','3 以认识基督为至宝','4 喜乐、知足与感恩'],
+       bg:'腓立比是保罗在欧洲建立的第一间教会（徒16章）。2:6-11的基督颂可能是早期教会的赞美诗，是新约基督论最重要的经文之一。'},
+      {name:'歌罗西书',eng:'Colossians',ch:4,author:'保罗',date:'约主后60–62年',dateShort:'~61 AD',
+       theme:'基督的超越与充足',verse:'神本性一切的丰盛都有形有体地居住在基督里面。（2:9）',
+       summary:'对抗歌罗西异端（混合主义），高举基督在创造与救赎中的至高主权。',
+       outline:['1:1-14 感恩与代祷','1:15-23 基督颂：万有首位','1:24-2:23 在基督里的丰盛','3-4 新生命的实践'],
+       bg:'歌罗西异端混合了犹太律法主义、希腊哲学和东方神秘主义。1:15-20的基督颂与腓2:6-11并列为新约最重要的基督论经文。'},
+      {name:'帖撒罗尼迦前书',eng:'1 Thessalonians',ch:5,author:'保罗',date:'约主后51年',dateShort:'~51 AD',
+       theme:'主必再来',verse:'因为主必亲自从天降临。（4:16）',
+       summary:'保罗最早的书信之一，称赞帖撒罗尼迦信徒的信心，教导关于复活与主再来的盼望。',
+       outline:['1-3 感恩回顾','4:1-12 圣洁生活','4:13-5:11 主再来与复活','5:12-28 最后劝勉'],
+       bg:'帖撒罗尼迦是马其顿省的首府，保罗在第二次宣教旅程中建立教会。4:13-18对已死信徒命运的教导，是新约末世论的重要经文。'},
+      {name:'帖撒罗尼迦后书',eng:'2 Thessalonians',ch:3,author:'保罗',date:'约主后51–52年',dateShort:'~52 AD',
+       theme:'主再来之前的澄清',verse:'弟兄们，你们行善不可丧志。（3:13）',
+       summary:'纠正关于主已经再来的误解，教导大罪人必先显露，劝勉信徒持守信心、勤勉工作。',
+       outline:['1 患难中的安慰','2 主再来前的征兆','3 勤勉工作的劝勉'],
+       bg:'有人声称"主的日子已经来到"（2:2），导致一些信徒停止工作、游手好闲。保罗纠正这一误解，强调末日尚未来到。'},
+      {name:'提摩太前书',eng:'1 Timothy',ch:6,author:'保罗',date:'约主后62–64年',dateShort:'~63 AD',
+       theme:'教会治理的指南',verse:'这家就是永生神的教会，真理的柱石和根基。（3:15）',
+       summary:'给年轻同工提摩太的教牧指导：纯正教义、教会秩序、长老执事资格、敬虔生活。',
+       outline:['1 防备假教师','2-3 敬拜与教会职分','4 操练敬虔','5-6 各群体的牧养'],
+       bg:'教牧书信之一（提前、提后、多）。提摩太是保罗"因信主作我真儿子的"（1:2），在以弗所牧养教会。'},
+      {name:'提摩太后书',eng:'2 Timothy',ch:4,author:'保罗',date:'约主后67年',dateShort:'~67 AD',
+       theme:'保罗的遗言——至死忠心',verse:'那美好的仗我已经打过了。（4:7）',
+       summary:'保罗殉道前的最后书信，劝勉提摩太刚强、忠心传道、忍受苦难，以圣经为根基。',
+       outline:['1 重新挑旺恩赐','2 作基督的精兵','3 末世危险与圣经权威','4 最后嘱咐与遗言'],
+       bg:'保罗在罗马第二次被囚时写成，此后不久（约主后67-68年）在尼禄逼迫下殉道。3:16是圣经论（圣经默示论）最重要的经文。'},
+      {name:'提多书',eng:'Titus',ch:3,author:'保罗',date:'约主后63年',dateShort:'~63 AD',
+       theme:'纯正教义产生敬虔生活',verse:'神救众人的恩典已经显明出来。（2:11）',
+       summary:'指导提多在克里特建立教会秩序，设立长老、驳斥假教师、教导活出与恩典相称的生活。',
+       outline:['1 长老资格与假教师','2 各群体教导与恩典','3 救恩本质与善行'],
+       bg:'提多是外邦人信徒，保罗称他为"照着我们共信之道作我真儿子的"（1:4）。2:11-14是保罗对救恩最精炼的概述之一。'},
+      {name:'腓利门书',eng:'Philemon',ch:1,author:'保罗',date:'约主后60–61年',dateShort:'~61 AD',
+       theme:'福音在人际关系中的大能',verse:'不再是奴仆，乃是亲爱的弟兄。（16节）',
+       summary:'保罗为逃跑的奴隶阿尼西母向主人腓利门求情，以福音的逻辑超越社会阶层。',
+       outline:['1-7 问安与称赞','8-16 为阿尼西母请求','17-25 保罗的担保与结语'],
+       bg:'这封最短的保罗书信展示了福音如何在罗马奴隶制的社会现实中发挥革命性的力量——"不再是奴仆，乃是亲爱的弟兄"。'},
+    ]
+  },
+  {
+    id:'general', title:'普通书信', subtitle:'General Epistles', icon:'📖',
+    color:'#1E8449', gradient:'linear-gradient(135deg,#1E8449,#27AE60)',
+    desc:'信仰的坚忍与实践 · 8卷',
+    background:'普通书信（或称大公书信）由希伯来书、雅各书、彼得前后书、约翰一二三书和犹大书组成。这些书信面向更广泛的教会读者，在不同处境中（逼迫、异端、灵性冷淡）教导信徒如何持守信仰、实践爱心、分辨真道、坚忍到底。',
+    books:[
+      {name:'希伯来书',eng:'Hebrews',ch:13,author:'不详',date:'约主后60年代',dateShort:'~65 AD',
+       theme:'基督超越一切——更美的约、更美的祭',verse:'我们既有这许多的见证人……就当奔那摆在我们前头的路程。（12:1）',
+       summary:'论证基督超越天使、摩西、亚伦，成就更美之约、一次永远的献祭，劝勉犹太基督徒凭信前行。',
+       outline:['1-2 基督超越天使','3-4 超越摩西：进入安息','5-7 麦基洗德等次的大祭司','8-10 更美的约与更美的祭','11 信心英雄榜','12-13 坚忍奔跑'],
+       bg:'作者不详（传统猜测包括保罗、巴拿巴、亚波罗等）。11章的信心英雄榜是圣经中最鼓舞人心的段落之一。全书可能写于耶路撒冷圣殿被毁（主后70年）之前。'},
+      {name:'雅各书',eng:'James',ch:5,author:'雅各（主的兄弟）',date:'约主后45–48年',dateShort:'~46 AD',
+       theme:'信心没有行为是死的',verse:'信心若没有行为就是死的。（2:26）',
+       summary:'可能是最早的新约书信，以智慧文学的风格劝勉：真实信仰必结出行为的果子。',
+       outline:['1 试炼中的喜乐与听道行道','2 不可偏心与信行并重','3 驯服舌头','4 世俗与骄傲的警戒','5 忍耐等候与祷告'],
+       bg:'雅各是耶稣的亲兄弟，耶路撒冷教会的领袖。路德曾称之为"稻草书信"，但改革宗传统正确理解：雅各论的是信心的证据（确据论），与保罗的因信称义并不矛盾。'},
+      {name:'彼得前书',eng:'1 Peter',ch:5,author:'使徒彼得',date:'约主后62–64年',dateShort:'~63 AD',
+       theme:'在苦难中的活泼盼望',verse:'叫我们有活泼的盼望。（1:3）',
+       summary:'写给散居小亚细亚受逼迫的信徒，以基督受苦的榜样劝勉持守圣洁、盼望与美好见证。',
+       outline:['1:1-2:10 活泼的盼望与圣洁子民','2:11-3:12 社会关系中的见证','3:13-4:19 为义受苦','5 牧者与群羊'],
+       bg:'可能写于罗马（"巴比伦"，5:13），在尼禄逼迫前夕。彼得以自己亲历基督受苦的见证，劝勉远方受苦的信徒。'},
+      {name:'彼得后书',eng:'2 Peter',ch:3,author:'使徒彼得',date:'约主后65–68年',dateShort:'~66 AD',
+       theme:'防备假教师、等候主再来',verse:'主所应许的尚未成就……乃是宽容你们。（3:9）',
+       summary:'彼得殉道前的遗书，警告假教师，教导主再来虽似延迟乃是恩典的宽容。',
+       outline:['1 在恩典和知识上长进','2 假教师的危险','3 主再来的确据'],
+       bg:'彼得预知自己即将殉道（1:14，参约21:18-19），因此留下这封紧急的遗书。传统记载彼得在尼禄统治末期在罗马倒钉十字架殉道。'},
+      {name:'约翰一书',eng:'1 John',ch:5,author:'使徒约翰',date:'约主后85–95年',dateShort:'~90 AD',
+       theme:'在光明中行走——爱与确据',verse:'神就是爱。（4:8）',
+       summary:'针对早期诺斯底异端，以光暗、爱恨、真伪的对比，提供得救确据的三个试金石。',
+       outline:['1:1-2:17 行在光中','2:18-27 防备敌基督','2:28-3:24 神儿女的标记','4:1-6 分辨诸灵','4:7-5:21 爱与信心的确据'],
+       bg:'针对的异端否认基督真正道成肉身（幻影说），约翰强调"论到从起初原有的生命之道，就是我们所听见、所看见、亲手摸过的"（1:1）。'},
+      {name:'约翰二书',eng:'2 John',ch:1,author:'使徒约翰',date:'约主后85–95年',dateShort:'~90 AD',
+       theme:'在真理中行走',verse:'我们大家要彼此相爱。（5节）',
+       summary:'劝勉在爱中行走，但不可接待否认基督道成肉身的假教师。',
+       outline:['1-3 真理与爱','4-6 在真理和爱中行走','7-11 提防假教师','12-13 结语'],
+       bg:'写给"蒙拣选的太太"（可能指某间教会），是新约中最短的书卷之一。'},
+      {name:'约翰三书',eng:'3 John',ch:1,author:'使徒约翰',date:'约主后85–95年',dateShort:'~90 AD',
+       theme:'为真理作工——接待与好客',verse:'我们应该接待这样的人，叫我们与他们一同为真理做工。（8节）',
+       summary:'称赞该犹的接待美德，批评丢特腓的专权，劝勉效法善行。',
+       outline:['1-4 称赞该犹的忠心','5-8 接待传道人','9-10 丢特腓的恶行','11-14 效法善行'],
+       bg:'该犹（Gaius）是初代教会常见的名字。这封私人信函提供了早期教会内部运作的珍贵窗口——巡回传道人的接待与教会领袖的权力问题。'},
+      {name:'犹大书',eng:'Jude',ch:1,author:'犹大（主的兄弟）',date:'约主后65年',dateShort:'~65 AD',
+       theme:'为真道竭力争辩',verse:'要为从前一次交付圣徒的真道竭力地争辩。（3节）',
+       summary:'紧急的护教书信，以旧约审判范例警告假教师的危害，勉励信徒在真道上自建。',
+       outline:['1-4 写信目的','5-16 假教师的范例与审判','17-23 信徒的自保','24-25 荣耀的颂赞'],
+       bg:'犹大是耶稣的兄弟、雅各的弟弟。24-25节的颂赞是新约中最优美的结束语之一——"那能保守你们不失脚、叫你们无瑕无疵、欢欢喜喜站在他荣耀之前的"。'},
+    ]
+  },
+  {
+    id:'apocalypse', title:'启示文学', subtitle:'Apocalyptic Literature', icon:'👑',
+    color:'#922B21', gradient:'linear-gradient(135deg,#922B21,#C0392B)',
+    desc:'万事的终局与新创造 · 1卷',
+    background:'启示录写于罗马皇帝多米田逼迫时期（约主后95年），使徒约翰被放逐在拔摩岛。它以旧约先知文学和启示文学的象征手法，揭示历史的终极走向：善恶的最终争战、基督的全然得胜、新天新地的来临。启示录不仅是圣经的结尾，更是创世记所开始之故事的荣耀完结——乐园失去，乐园复得。',
+    books:[
+      {name:'启示录',eng:'Revelation',ch:22,author:'使徒约翰',date:'约主后95年',dateShort:'~95 AD',
+       theme:'基督得胜——万事的更新与新天新地',verse:'看哪，我将一切都更新了！（21:5）',
+       summary:'圣经的高潮与结局，以异象启示基督在历史中的掌权、善恶的最终争战、巴比伦的倾覆与新耶路撒冷的降临。',
+       outline:['1 复活基督的异象','2-3 给七教会的书信','4-5 天上的宝座与羔羊','6-7 六印与受印者','8-11 七号的审判','12-14 龙、兽与羔羊','15-16 七碗的审判','17-18 大巴比伦的倾覆','19-20 基督再来与最后审判','21-22 新天新地与新耶路撒冷'],
+       bg:'全书引用或暗指旧约约500次以上，却从未直接引用。它以创世记的对应结构结束圣经：生命树重现（22:2）、咒诅消除（22:3）、神与人同住（21:3）。"主耶稣啊，我愿你来！"（22:20）是整本圣经的最后祷告。'},
+    ]
+  },
+];
+
+// Timeline nodes
+const TIMELINE = [
+  {label:'创造',year:'太初',color:'#1B4332'},
+  {label:'亚伯拉罕',year:'~2000 BC',color:'#1B4332'},
+  {label:'出埃及',year:'~1446 BC',color:'#1B4332'},
+  {label:'进入迦南',year:'~1406 BC',color:'#2D6A4F'},
+  {label:'大卫王',year:'~1010 BC',color:'#2D6A4F'},
+  {label:'圣殿建成',year:'~966 BC',color:'#5B3A8C'},
+  {label:'王国分裂',year:'~930 BC',color:'#2D6A4F'},
+  {label:'北国灭亡',year:'722 BC',color:'#9B2226'},
+  {label:'南国被掳',year:'586 BC',color:'#9B2226'},
+  {label:'归回重建',year:'538 BC',color:'#CA6702'},
+  {label:'两约之间',year:'~430–5 BC',color:'#888'},
+  {label:'基督降生',year:'~5 BC',color:'#0A3D62'},
+  {label:'十架复活',year:'~30 AD',color:'#0A3D62'},
+  {label:'五旬节',year:'~30 AD',color:'#1A5276'},
+  {label:'保罗书信',year:'~49–67 AD',color:'#6C3483'},
+  {label:'启示录',year:'~95 AD',color:'#922B21'},
+];
+
+// ═══════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════
+function init() {
+  renderNav();
+  renderTimeline();
+  renderSections();
+  setupScrollEffects();
+  setupNavHighlight();
+}
+
+function renderNav() {
+  const nav = document.getElementById('nav-inner');
+  SECTIONS.forEach(s => {
+    const pill = document.createElement('span');
+    pill.className = 'nav-pill';
+    pill.textContent = s.icon + ' ' + s.title;
+    pill.style.color = s.color;
+    pill.style.borderColor = s.color + '40';
+    pill.dataset.section = s.id;
+    pill.onclick = () => {
+      document.getElementById(s.id).scrollIntoView({behavior:'smooth',block:'start'});
+    };
+    nav.appendChild(pill);
+  });
+}
+
+function renderTimeline() {
+  const track = document.getElementById('timeline-track');
+  TIMELINE.forEach(n => {
+    const node = document.createElement('div');
+    node.className = 'tl-node';
+    node.innerHTML = `
+      <div class="tl-dot" style="background:${n.color}"></div>
+      <div class="tl-label">${n.label}</div>
+      <div class="tl-year">${n.year}</div>
+    `;
+    track.appendChild(node);
+  });
+}
+
+function renderSections() {
+  const main = document.getElementById('main-content');
+  SECTIONS.forEach((s, si) => {
+    const section = document.createElement('section');
+    section.className = 'section';
+    section.id = s.id;
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'section-header';
+    header.innerHTML = `
+      <div class="section-banner" style="background:${s.gradient}">
+        <span class="section-icon">${s.icon}</span>
+        <div class="section-name">${s.title}</div>
+        <div class="section-desc">${s.desc}</div>
+        <span class="section-badge">${s.subtitle}</span>
+        <div class="section-bg-text">${s.background}</div>
+      </div>
+    `;
+    section.appendChild(header);
+
+    // Cards
+    const grid = document.createElement('div');
+    grid.className = 'cards-grid';
+    s.books.forEach((b, bi) => {
+      const card = document.createElement('div');
+      card.className = 'book-card';
+      card.style.transitionDelay = `${bi * 0.06}s`;
+
+      const outlineHtml = b.outline.map(l =>
+        `<div class="outline-line"><span style="color:${s.color}">▸</span> ${l}</div>`
+      ).join('');
+
+      card.innerHTML = `
+        <div class="card-accent" style="background:${s.gradient}"></div>
+        <div class="card-top">
+          <div class="card-chap" style="background:${s.color}">${b.ch}<small>章</small></div>
+          <div class="card-title-area">
+            <div class="card-title">${b.name}</div>
+            <div class="card-eng">${b.eng}</div>
+            <div class="card-meta">
+              <span class="card-tag">✍ ${b.author}</span>
+              <span class="card-tag">📅 ${b.dateShort}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-theme" style="border-color:${s.color};color:${s.color}">${b.theme}</div>
+          <div class="card-verse">${b.verse}</div>
+          <div class="card-summary">${b.summary}</div>
+          <button class="card-outline-toggle" onclick="toggleOutline(this)">
+            <span class="arrow">▶</span> 大纲结构
+          </button>
+          <div class="card-outline">
+            <div class="card-outline-inner">${outlineHtml}</div>
+          </div>
+          <div class="card-bg-info">
+            <strong>📜 历史背景：</strong>${b.bg}
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+    section.appendChild(grid);
+    main.appendChild(section);
+  });
+}
+
+function toggleOutline(btn) {
+  const arrow = btn.querySelector('.arrow');
+  const outline = btn.nextElementSibling;
+  arrow.classList.toggle('open');
+  outline.classList.toggle('open');
+}
+
+function setupScrollEffects() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+
+  document.querySelectorAll('.book-card, .section-header').forEach(el => observer.observe(el));
+
+  // Back to top & navbar shadow
+  const backTop = document.getElementById('backTop');
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    backTop.classList.toggle('visible', y > 600);
+    navbar.classList.toggle('scrolled', y > 100);
+  });
+}
+
+function setupNavHighlight() {
+  const pills = document.querySelectorAll('.nav-pill');
+  const sectionEls = SECTIONS.map(s => document.getElementById(s.id));
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        pills.forEach(p => {
+          const isActive = p.dataset.section === id;
+          p.classList.toggle('active', isActive);
+          if (isActive) {
+            const s = SECTIONS.find(s => s.id === id);
+            p.style.background = s.color;
+            p.style.color = '#fff';
+            p.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+          } else {
+            p.style.background = 'transparent';
+            const s = SECTIONS.find(s => s.id === p.dataset.section);
+            p.style.color = s.color;
+          }
+        });
+      }
+    });
+  }, {threshold: 0.15});
+
+  sectionEls.forEach(el => { if(el) observer.observe(el); });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
