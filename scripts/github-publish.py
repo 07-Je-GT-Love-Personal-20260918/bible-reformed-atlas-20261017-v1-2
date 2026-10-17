@@ -68,9 +68,9 @@ def main():
         existing=api(prefix+'/git/trees/'+commit['tree']['sha']+'?recursive=1')
         known={entry['path']:entry['sha'] for entry in existing['tree'] if entry['type']=='blob'}
         tree=[]
-        roots=['index.html','study.html','bible-66-overview.html','reformed-bible-66-study.html',
+        roots=['index.html','study.html','creeds.html','bible-66-overview.html','reformed-bible-66-study.html',
                'bible_66_quick_frontend_guide.html','README.md','package.json','package-lock.json',
-               'vercel.json','.gitignore','assets','books','scripts','build','.github']
+               'vercel.json','.vercelignore','.gitignore','assets','books','scripts','content','build','.github']
         files=[]
         for name in roots:
             p=ROOT/name
@@ -91,7 +91,7 @@ def main():
                 if len(tree)%10==0: print('Uploaded source files:',len(tree),'/',len(files),flush=True)
         newtree=api(prefix+'/git/trees','POST',{'base_tree':commit['tree']['sha'],'tree':tree})
         created=api(prefix+'/git/commits','POST',{
-            'message':'Add animated Bible atlas and static deployment workflows (2026-10-17 v1.2)',
+            'message':'Unify Bible study reader, nested contents, verified creeds and recall tools (2026-10-17 v1.3)',
             'tree':newtree['sha'],'parents':[parent]})
         api(prefix+'/git/refs/heads/'+branch,'PATCH',{'sha':created['sha'],'force':False})
         print('Published commit:',created['html_url'],flush=True)

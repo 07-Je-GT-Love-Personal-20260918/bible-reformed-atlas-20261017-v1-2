@@ -1,0 +1,34 @@
+import {readFile,writeFile,readdir} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+const {groups,books}=JSON.parse(await readFile('assets/books.json','utf8'));
+const creeds=JSON.parse(await readFile('assets/creeds.json','utf8'));
+const esc=value=>String(value??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+if(books.length!==66||creeds.length!==3)throw Error('Incomplete source data');
+for(const creed of creeds){const digest=createHash('sha256').update(creed.paragraphs.join('\n\n')).digest('hex');if(digest!==creed.sha256)throw Error('Creed text verification failed: '+creed.id);}
+const files=(await readdir('books')).filter(f=>f.endsWith('.html')).sort();
+const bookId=i=>`book-${String(i+1).padStart(2,'0')}`;
+const bookLink=i=>`books/${files.find(f=>f.startsWith(String(i+1).padStart(2,'0')+'-'))}`;
+const field=(label,text)=>`<div class="book-field"><h5>${label}</h5><p>${esc(text)}</p></div>`;
+const rendered=groups.map(group=>{
+ const items=books.map((b,i)=>({...b,index:i})).filter(b=>b.group===group.id);
+ return `<section class="book-group" id="${group.id}" data-testament="${group.testament}"><div class="group-heading"><p class="eyebrow">${group.testament}</p><h3>${group.name}<span>${items.length}卷</span></h3><p>${group.summary}</p></div><div class="book-grid">${items.map(b=>`<article class="book-card" id="${bookId(b.index)}" data-testament="${group.testament}" data-tags="${esc((b.tags||[]).join(' '))}" style="--book-color:${group.color}"><header><span class="book-number">${String(b.index+1).padStart(2,'0')}</span><div><h4>${esc(b.name)}</h4><p class="book-english">${esc(b.english)} · ${b.chapters}章</p></div></header><p class="book-core">${esc(b.core)}</p>${field('整本圣经中的位置',b.whole)}<div class="book-fields">${field('处境：前因后果',b.context)}${field('目的：为什么写',b.why)}${field('结构：写了什么',b.what)}${field('局部：释经关键',b.local)}${field('成全：如何指向基督',b.christ)}${field('应用：今天怎样回应',b.application)}</div><p class="book-recall"><b>合上书试说：</b>本卷的处境、核心与基督成全，能各用一句话说明吗？</p><a class="book-deep-link" href="${bookLink(b.index)}">独立书卷页 · 延伸阅读 ↗</a></article>`).join('')}</div></section>`;
+}).join('\n');
+const topic=(href,label)=>`<li><a href="#${href}">${label}</a></li>`;
+const branch=(label,children,open=false)=>`<li><details${open?' open':''}><summary>${label}</summary><ul>${children}</ul></details></li>`;
+const toc=`<ol class="toc-root">${branch('01 全景与圣约',topic('whole','本质核心')+topic('method','五步读法')+topic('arc','六阶段故事线')+topic('covenants','圣约与基督成全'),true)}${branch('02 历史与地理',topic('timeline','六个年代锚点')+topic('animated-atlas','动态历史图谱')+topic('history-story','时代因果')+topic('kings','南北列王全表')+topic('geography','区域与文化'),true)}${branch('03 信经与信条',topic('creed-why','为什么需要三份')+topic('creed-compare','深度比较表')+topic('creed-difficult','三个核心难点')+topic('three-forms','三项联合信条')+branch('原文阅读与背诵',topic('creed-reading','背诵工具')+creeds.map(c=>topic('creed-'+c.id,c.title)).join(''),true),true)}${branch('04 圣经66卷',topic('books','搜索与筛选')+['旧约','新约'].map(t=>branch(t,groups.filter(g=>g.testament===t).map(g=>branch(g.name,topic(g.id,'本组概览')+books.map((b,i)=>b.group===g.id?topic(bookId(i),b.name):'').join(''))).join(''),true)).join(''),true)}${branch('05 记忆与复习',topic('memory-map','四条记忆路径')+topic('memory-cards','主动回忆卡')+topic('memory-plan','五分钟复习法'),true)}${topic('sources','06 来源与编辑说明')}</ol>`;
+const creedArticles=(clean=false)=>creeds.map(c=>`<article class="creed-text" id="creed-${c.id}" data-creed="${c.id}"><header><p class="eyebrow">${c.id.toUpperCase()} CREED</p><h3>${esc(c.title)}</h3></header><div class="creed-paragraphs">${c.paragraphs.map((p,i)=>`<p data-paragraph="${i}" tabindex="0">${esc(p)}</p>`).join('')}</div><p class="creed-source">来源：<a href="${esc(c.source)}" target="_blank" rel="noopener noreferrer">ccifellowship.org · ${esc(c.title)}</a> · 提取日期 ${c.retrieved}${clean?'':`<br><span class="hash">SHA-256 ${c.sha256}</span>`}</p>${c.id==='athanasian'?'<p class="editor-note">版本提示：来源正文编号止于42，本阅读版保留其编号；未按其他版本重编号。</p>':''}</article>`).join('\n');
+let history=await readFile('content/history.html','utf8');
+history=history.replaceAll('<section id=','<section class="chapter" id=');
+let template=await readFile('content/reader.html','utf8');
+const recallData=books.map(b=>({question:`《${b.name}》为什么写？怎样指向基督？`,answer:`核心：${b.core}\n目的：${b.why}\n成全：${b.christ}`}));
+template=template.replace('{{TOC}}',toc).replace('{{HISTORY}}',history).replace('{{BOOKS}}',rendered).replace('{{CREEDS}}',creedArticles()).replace('</body>',`<script id="recallData" type="application/json">${JSON.stringify(recallData).replaceAll('<','\\u003c')}</script></body>`);
+await writeFile('index.html',template);await writeFile('study.html',template);
+const clean=`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="atlas-version" content="1.3.0"><title>三份信经 · 干净阅读与打印</title><link rel="stylesheet" href="assets/reader.css"></head><body class="clean-reader"><div class="clean-tools"><a href="index.html#creed-reading">← 返回学习主页</a><label for="printCreed">打印范围 <select id="printCreed"><option value="all">全部三份</option>${creeds.map(c=>`<option value="${c.id}">${c.title}</option>`).join('')}</select></label><button type="button" id="printButton">打印当前篇目</button></div><main id="cleanMain"><h1>三份信经</h1><p class="clean-note">干净阅读版 · 正文保持指定来源字词与标点 · 2026-10-17</p>${creedArticles(true)}</main><script src="assets/clean-reader.js" defer></script></body></html>`;
+await writeFile('creeds.html',clean);
+for(let i=0;i<files.length;i++){
+ const file='books/'+files[i];
+ const before=await readFile(file,'utf8');
+ const after=before.replace(/<nav class="topnav">[\s\S]*?<\/nav>/,'').replace(/(<a class="backhome" href=")\.\.\/index\.html(?:#[^"]*)?"/,'$1../index.html#'+bookId(i)+'"');
+ if(after!==before)await writeFile(file,after);
+}
+console.log('Composed v1.3: unified homepage, study alias, 66 expanded book guides, 3 verified creed texts.');

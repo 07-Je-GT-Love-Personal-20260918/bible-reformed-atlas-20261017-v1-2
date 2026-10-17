@@ -1,5 +1,10 @@
-import {mkdir,copyFile,cp,readdir} from 'node:fs/promises';
+import {mkdir,copyFile,cp,readdir,rm} from 'node:fs/promises';
+import {resolve,dirname,basename} from 'node:path';
+await import('./compose-reader.mjs');
+const destination=resolve('dist');
+if(dirname(destination)!==resolve('.')||basename(destination)!=='dist')throw Error('Unexpected static output path');
+await rm(destination,{recursive:true,force:true});
 await mkdir('dist',{recursive:true});
-for(const file of (await readdir('.')).filter(file=>file.endsWith('.html'))) await copyFile(file,`dist/${file}`);
+for(const file of (await readdir('.')).filter(file=>file.endsWith('.html')&&!['bundle.html','preview.html'].includes(file))) await copyFile(file,`dist/${file}`);
 for(const dir of ['assets','books']) await cp(dir,`dist/${dir}`,{recursive:true});
 console.log('Static site built: homepage, study desk, 66 books and assets.');

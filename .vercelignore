@@ -1,0 +1,10 @@
+.git
+.deploy
+.openai
+node_modules
+dist
+site-version-*.tar
+index.js
+bundle.html
+preview.html
+*.pdf

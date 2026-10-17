@@ -1,12 +1,12 @@
 /* Native SVG and requestAnimationFrame: no animation library or external requests. */
-const host = document.querySelector('#timeline') || document.querySelector('main');
+const host = document.querySelector('#motionMount') || document.querySelector('#timeline') || document.querySelector('main');
 if (host) {
   const panel = document.createElement('section');
   panel.className = 'atlas-motion';
   panel.id = 'animated-atlas';
   panel.setAttribute('aria-label', '动画历史学习台');
   panel.innerHTML = `
-    <div class="motion-heading"><div><p class="motion-kicker">EXPLORE THE STORY · 动态历史图谱</p><h2>让年代、王国与地点一起动起来</h2></div><span class="motion-badge">交互学习 / v1.2</span></div>
+    <div class="motion-heading"><div><p class="motion-kicker">EXPLORE THE STORY · 动态历史图谱</p><h2>让年代、王国与地点一起动起来</h2></div><span class="motion-badge">交互学习 / v1.3</span></div>
     <p>拖动年代游标，看南北王国的兴衰。地图为方位示意，路线不代表精确行程；列王共治时会同时显示多位名字。</p>
     <div class="motion-controls"><button type="button" id="atlasPlay" aria-pressed="false">▶ 播放历史</button><button type="button" id="atlasReset">↺ 回到分裂</button><output id="atlasYear" for="atlasYearRange">主前 931 年</output></div>
     <label class="motion-range-label" for="atlasYearRange">历史游标 · 可用键盘方向键微调</label><input id="atlasYearRange" class="motion-range" type="range" min="0" max="473" step="1" value="0" aria-valuetext="主前931年">
