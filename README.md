@@ -12,21 +12,21 @@
 
 ## 公开部署状态
 
-三个平台采用统一版本名 `bible-reformed-atlas-20261017-v1-2`。发布进度如下；仅状态标为已核验的地址可视为完成。
+三个平台采用统一版本名 `bible-reformed-atlas-20261017-v1-2`。2026-10-17 已公开访问核验首页均返回 HTTP 200，且包含 v1.2 动画脚本；Vercel 与 Surge 的学习台页也已核验 HTTP 200。
 
 | 平台 | 公开地址 | 状态 |
 | --- | --- | --- |
-| GitHub Pages | https://07-je-gt-love-personal-20260918.github.io/bible-reformed-atlas-20261017-v1-2/ | 正在发布，待核验 |
-| Surge | https://bible-reformed-atlas-20261017-v1-2.surge.sh | 正在发布，待核验 |
-| Vercel | https://bible-reformed-atlas-20261017-v1-2.vercel.app | 平台已发布，待公开访问核验 |
+| GitHub Pages | https://07-je-gt-love-personal-20260918.github.io/bible-reformed-atlas-20261017-v1-2/ | 已发布并核验 |
+| Surge | https://bible-reformed-atlas-20261017-v1-2.surge.sh | 已发布并核验 |
+| Vercel | https://bible-reformed-atlas-20261017-v1-2.vercel.app | 已发布并核验 |
 
-沿用用户指定的旧仓库 `bible-reformed-atlas-20260919`，计划原地改名为 [bible-reformed-atlas-20261017-v1-2](https://github.com/07-Je-GT-Love-Personal-20260918/bible-reformed-atlas-20261017-v1-2)，保留已有提交历史。本地 origin 保留既有 Sites 源仓库，目标 GitHub 仓库通过官方 API 增量更新，非强制覆盖。
+已沿用用户指定的旧仓库 `bible-reformed-atlas-20260919`，原地改名为 [bible-reformed-atlas-20261017-v1-2](https://github.com/07-Je-GT-Love-Personal-20260918/bible-reformed-atlas-20261017-v1-2)，保留已有提交历史。本地 origin 保留既有 Sites 源仓库，目标 GitHub 仓库通过官方 API 增量更新，非强制覆盖。
 
 ## 验证与维护
 
 已通过真实 Chromium 在 360、390、768、1440 像素宽度对首页及学习台执行检查：无页面横向溢出、无 JavaScript 异常；年代跳转、王国状态、播放暂停、地图切换、目录开关和答案揭晓均通过。检查脚本：`scripts/verify-browser.mjs`；需将 Playwright 安装在 `.deploy/tools` 并安装 Chromium。构建本身不依赖此工具。
 
-GitHub Pages 随 `main` 或 `master` 分支提交自动发布。Vercel 维护命令：`vercel deploy --prod`；首次须官方登录及关联项目。Surge 维护命令：`surge dist bible-reformed-atlas-20261017-v1-2.surge.sh`；可使用平台令牌环境变量认证。GitHub 发布助手读取隐藏令牌，不保存凭据，基于远端当前提交创建新提交，保留远端其他文件。
+GitHub Pages 随 `main` 或 `master` 分支提交自动发布。Vercel 已连接上述 GitHub 仓库，后续提交由 Git 集成触发构建；也可运行 `vercel deploy --prod`。Surge 自动发布工作流位于 `.github/workflows/surge.yml`，使用仓库加密 Secret `SURGE_TOKEN`；也可手动运行 `surge dist bible-reformed-atlas-20261017-v1-2.surge.sh`。GitHub 发布助手读取隐藏令牌，不保存凭据，基于远端当前提交创建新提交，保留远端其他文件。
 
 ## 编辑与来源状态
 

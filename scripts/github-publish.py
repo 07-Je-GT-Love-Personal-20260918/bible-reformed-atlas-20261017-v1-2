@@ -2,7 +2,7 @@
 
 No credentials are stored or printed. Existing files/history are preserved.
 """
-import argparse, base64, getpass, json, pathlib, sys, urllib.request, urllib.error, time
+import argparse, base64, getpass, json, pathlib, sys, urllib.request, urllib.error, time, hashlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 OWNER = '07-Je-GT-Love-Personal-20260918'
@@ -65,6 +65,8 @@ def main():
         ref=api(prefix+'/git/ref/heads/'+branch)
         parent=ref['object']['sha']
         commit=api(prefix+'/git/commits/'+parent)
+        existing=api(prefix+'/git/trees/'+commit['tree']['sha']+'?recursive=1')
+        known={entry['path']:entry['sha'] for entry in existing['tree'] if entry['type']=='blob'}
         tree=[]
         roots=['index.html','study.html','bible-66-overview.html','reformed-bible-66-study.html',
                'bible_66_quick_frontend_guide.html','README.md','package.json','package-lock.json',
@@ -75,9 +77,14 @@ def main():
             files.extend(p.rglob('*') if p.is_dir() else [p])
         files=[p for p in files if p.is_file() and '__pycache__' not in p.parts]
         def upload(p):
+            content=p.read_bytes()
+            path=p.relative_to(ROOT).as_posix()
+            digest=hashlib.sha1(b'blob '+str(len(content)).encode()+b'\0'+content).hexdigest()
+            if known.get(path)==digest:
+                return {'path':path,'mode':'100644','type':'blob','sha':digest}
             blob=api(prefix+'/git/blobs','POST',{
-                'content':base64.b64encode(p.read_bytes()).decode(),'encoding':'base64'})
-            return {'path':p.relative_to(ROOT).as_posix(),'mode':'100644','type':'blob','sha':blob['sha']}
+                'content':base64.b64encode(content).decode(),'encoding':'base64'})
+            return {'path':path,'mode':'100644','type':'blob','sha':blob['sha']}
         with ThreadPoolExecutor(max_workers=4) as pool:
             for task in as_completed([pool.submit(upload,p) for p in files]):
                 tree.append(task.result())
