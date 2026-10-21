@@ -1,6 +1,8 @@
 # 圣经全景 · 救赎历史与逐卷精读
 
-**bible-reformed-atlas-20261021-v1-4-GTstudy · 2026-10-21 · v1.4.0**
+**圣经全景 · 2026-10-21 · v1.5.0 GTstudy**
+
+本次沿用 v1.4 的仓库名与网址，避免每轮内容更新改变链接。
 
 沿用同一个 GitHub 仓库（ID 1376927002）原地改名，保留全部历史；没有创建重复仓库。主线为欧陆改革宗、圣约神学、圣经神学与救赎历史。
 
@@ -14,6 +16,16 @@
 | 源码仓库 | https://github.com/07-Je-GT-Love-Personal-20260918/bible-reformed-atlas-20261021-v1-4-GTstudy |
 
 Vercel 与 Surge 的旧域名保留为兼容入口。GitHub 仓库改名后 Pages 使用上述新路径；旧 Pages 项目路径不保证自动跳转。
+
+## v1.5：66卷内容与排版深化
+
+- 新增 `data/book-depth-v15.tsv`：66卷逐一编写，约2.1万字；每卷三段内容推进、一组专属难题与答案、一项具体回应，共198段论证路线。
+- 将大纲从章节罗列推进为“发生什么—为何推进—怎样落到全卷目的”；每段附经文对照入口。
+- 各卷新增难题，例如：神转恶为善与人的责任、迦南审判与今日教会、苦难是否都是惩罚、格言是否保证应验、因信称义与善行、末世异象与日期推算。
+- 逐卷页改为桌面左侧目录，可隐藏并扩展正文；手机默认收起。新增三段分色路线、难题框、具体行动卡与四格回忆区。
+- 动画只对进入视口的图卡做一次轻量渐入；无脚本时正文仍完整可读，遵守减少动态效果及关闭动画的偏好。
+- 66卷目录按书卷类别分组，可搜索书名和难题；主页图卡也加入相应难题与具体应用，不再只用统一提示句。
+- 四主题、个人笔记、稳定网址、原文校验及已有部署流程继续保留；没有另建仓库。
 
 ## v1.4 更新
 
@@ -36,7 +48,7 @@ Vercel 与 Surge 的旧域名保留为兼容入口。GitHub 仓库改名后 Page
 
 `npm run build`：先生成66卷，再合成统一主页、学习页和信经阅读页，最后输出 `dist/`。构建只用 Node 内置模块，不需要框架运行时。`python scripts/verify-static.py` 检查文件、锚点和66卷完整性。
 
-编辑入口：`content/reader.html`、`content/core-depth.html`、`content/history.html`、`assets/books.json`、`data/study-notes-20261003.tsv`、`data/book-context.json`、`assets/experience.css` 与 `assets/experience.js`。生成页面也一并提交，方便直接恢复。
+编辑入口：`content/reader.html`、`content/core-depth.html`、`content/history.html`、`assets/books.json`、`data/study-notes-20261003.tsv`、`data/book-context.json`、`data/book-depth-v15.tsv`、`assets/experience.css` 与 `assets/experience.js`。生成页面也一并提交，方便直接恢复。
 
 GitHub Pages 与 Surge 沿用工作流。Surge 使用仓库加密 Secret `SURGE_TOKEN`，同时发布新旧域名；Vercel 沿用现有项目 ID `prj_77MJ8md0LyZWHxv3T7QdvzWll2k4`，新增版本域名，不移除旧域名。任何 token、密码或私钥不得进入源码、提交、构建输出或公开日志。
 
@@ -45,8 +57,9 @@ GitHub Pages 与 Surge 沿用工作流。Surge 使用仓库加密 Secret `SURGE_
 | 版本 | 日期 | 说明 |
 | --- | --- | --- |
 | v1.3.0 | 2026-10-17 | 更新前固定提交 `42b0d53f535b662dfbcd5c72062b3b24845f3683`；统一主页、三份信经与复习工具 |
+| v1.5.0-GTstudy | 2026-10-21 | 66卷新增2.1万字释读、198段论证路线、专属难题与回应、左侧目录及轻量动画 |
 | v1.4.0-GTstudy | 2026-10-21 | 性能、四主题、持久笔记、66卷独立释读与核心内容增强 |
 
 更新前源码保存在分支 `archive/20261021-before-v1.4-GTstudy`，发布标签 `v1.3.0-20261017-before-GTstudy` 指向同一固定提交。需要恢复时从固定提交新建恢复分支，运行构建并检查，再以正常提交更新主分支；不要强推覆盖历史。
 
-验证记录见 `docs/verification-20261021.md`。实测结论只覆盖记录中的设备与浏览器，不承诺所有终端恒定帧率。
+验证记录见 `docs/verification-20261021-v15.md` 与 `docs/verification-20261021.md`。实测结论只覆盖记录中的设备与浏览器，不承诺所有终端恒定帧率。

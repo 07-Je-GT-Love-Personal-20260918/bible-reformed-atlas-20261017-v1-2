@@ -26,5 +26,5 @@ panel.querySelectorAll('[data-note-style]').forEach(button=>button.addEventListe
 $('#exportNotes').addEventListener('click',()=>{const text=`# ${document.title}\n\n`+notes.map(n=>`> ${n.quote}\n\n${n.thought}\n`).join('\n');const url=URL.createObjectURL(new Blob([text],{type:'text/markdown;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='GTstudy-notes-'+new Date().toISOString().slice(0,10)+'.md';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});render();
 document.addEventListener('visibilitychange',()=>document.body.classList.toggle('page-away',document.hidden));
 const hero=document.querySelector('.reader-hero');if(hero){const observer=new IntersectionObserver(entries=>{hero.classList.toggle('hero-away',!entries[0].isIntersecting)});observer.observe(hero);}
-document.querySelector('.book-toc-toggle')?.addEventListener('click',e=>{const nav=document.querySelector('.book-toc');nav.hidden=!nav.hidden;e.currentTarget.setAttribute('aria-expanded',String(!nav.hidden))});
+document.querySelector('.book-toc-toggle')?.addEventListener('click',e=>{const nav=document.querySelector('.book-toc');nav.hidden=!nav.hidden;e.currentTarget.setAttribute('aria-expanded',String(!nav.hidden));document.querySelector('.book-shell')?.classList.toggle('book-toc-closed',nav.hidden)});
 })();

@@ -37,6 +37,16 @@ for book in books:
         assert book[field] and '???' not in book[field], (book['english'],field)
 assert not (public/'CNAME').exists(), 'Stale Surge CNAME must not enter other deployments'
 assert len({p.name[:2] for p in (public/'books').glob('[0-9][0-9]-*.html')})==66
+depth=[line.split('|') for line in (root/'data/book-depth-v15.tsv').read_text(encoding='utf-8').splitlines()]
+assert len(depth)==66 and all(len(row)==10 for row in depth)
+assert [row[0] for row in depth]==[book['name'] for book in books]
+assert len({row[7] for row in depth})==66 and len({row[9] for row in depth})==66
+for number in range(1,67):
+    path=sorted((public/'books').glob(f'{number:02d}-*.html'))[0]
+    text=path.read_text(encoding='utf-8')
+    assert text.count('class="path-step"')==3, path.name
+    assert 'id="difficult"' in text and depth[number-1][7] in text, path.name
+    assert 'window.print' not in text and 'fonts.googleapis' not in text, path.name
 print('Static validation:',len(paths),'pages;',len(books),'complete book records;',len(errors),'link/fragment/id errors.')
 for error in errors:print(error)
 assert not errors
