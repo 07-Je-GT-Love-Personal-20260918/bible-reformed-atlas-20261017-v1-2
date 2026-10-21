@@ -36,7 +36,7 @@ Vercel 与 Surge 的旧域名保留为兼容入口。GitHub 仓库改名后 Page
 
 `npm run build`：先生成66卷，再合成统一主页、学习页和信经阅读页，最后输出 `dist/`。构建只用 Node 内置模块，不需要框架运行时。`python scripts/verify-static.py` 检查文件、锚点和66卷完整性。
 
-编辑入口：`content/reader.html`、`content/core-depth.html`、`content/history.html`、`assets/books.json`、`data/study-notes-20261003.tsv`、`assets/experience.css` 与 `assets/experience.js`。生成页面也一并提交，方便直接恢复。
+编辑入口：`content/reader.html`、`content/core-depth.html`、`content/history.html`、`assets/books.json`、`data/study-notes-20261003.tsv`、`data/book-context.json`、`assets/experience.css` 与 `assets/experience.js`。生成页面也一并提交，方便直接恢复。
 
 GitHub Pages 与 Surge 沿用工作流。Surge 使用仓库加密 Secret `SURGE_TOKEN`，同时发布新旧域名；Vercel 沿用现有项目 ID `prj_77MJ8md0LyZWHxv3T7QdvzWll2k4`，新增版本域名，不移除旧域名。任何 token、密码或私钥不得进入源码、提交、构建输出或公开日志。
 
@@ -47,6 +47,6 @@ GitHub Pages 与 Surge 沿用工作流。Surge 使用仓库加密 Secret `SURGE_
 | v1.3.0 | 2026-10-17 | 更新前固定提交 `42b0d53f535b662dfbcd5c72062b3b24845f3683`；统一主页、三份信经与复习工具 |
 | v1.4.0-GTstudy | 2026-10-21 | 性能、四主题、持久笔记、66卷独立释读与核心内容增强 |
 
-更新前源码保存在分支 `archive/20261021-before-v1.4-GTstudy`，并有对应旧版发布标签。需要恢复时从固定提交新建恢复分支，运行构建并检查，再以正常提交更新主分支；不要强推覆盖历史。
+更新前源码保存在分支 `archive/20261021-before-v1.4-GTstudy`，发布标签 `v1.3.0-20261017-before-GTstudy` 指向同一固定提交。需要恢复时从固定提交新建恢复分支，运行构建并检查，再以正常提交更新主分支；不要强推覆盖历史。
 
 验证记录见 `docs/verification-20261021.md`。实测结论只覆盖记录中的设备与浏览器，不承诺所有终端恒定帧率。
