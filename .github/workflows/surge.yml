@@ -21,7 +21,9 @@ jobs:
       - run: npm run build
       - name: Publish verified static directory
         if: env.SURGE_TOKEN != ''
-        run: npx --yes --package=surge@0.44.6 surge dist bible-reformed-atlas-20261017-v1-2.surge.sh
+        run: |
+          npx --yes --package=surge@0.44.6 surge dist bible-reformed-atlas-20261021-v1-4-gtstudy.surge.sh
+          npx --yes --package=surge@0.44.6 surge dist bible-reformed-atlas-20261017-v1-2.surge.sh
       - name: Report missing deployment credential
         if: env.SURGE_TOKEN == ''
         run: echo 'SURGE_TOKEN repository secret must be configured for automatic publishing.'

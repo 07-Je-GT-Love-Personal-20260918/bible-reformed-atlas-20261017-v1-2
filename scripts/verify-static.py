@@ -36,7 +36,7 @@ for book in books:
     for field in ['name','core','whole','context','why','what','local','christ','application']:
         assert book[field] and '???' not in book[field], (book['english'],field)
 assert not (public/'CNAME').exists(), 'Stale Surge CNAME must not enter other deployments'
-assert len(list((public/'books').glob('*.html')))==66
+assert len({p.name[:2] for p in (public/'books').glob('[0-9][0-9]-*.html')})==66
 print('Static validation:',len(paths),'pages;',len(books),'complete book records;',len(errors),'link/fragment/id errors.')
 for error in errors:print(error)
 assert not errors

@@ -41,8 +41,8 @@ if (host) {
     const year=931-Number(range.value);range.setAttribute('aria-valuetext',`主前${year}年`);$('#atlasYear').value=`主前 ${year} 年`;
     $('#atlasNorth').textContent=monarchs(north,year,722,'王国已亡 · 亚述统治');
     $('#atlasSouth').textContent=monarchs(south,year,586,year<=538?'波斯时期 · 归回群体':'亡国被掳 · 巴比伦时期');
-    $('#northLife').style.width=`${Math.max(0,(year-722)/209)*100}%`;
-    $('#southLife').style.width=`${Math.max(0,(year-586)/345)*100}%`;
+    $('#northLife').style.transform=`scaleX(${Math.max(0,(year-722)/209)})`;
+    $('#southLife').style.transform=`scaleX(${Math.max(0,(year-586)/345)})`;
     const event=[...milestones].reverse().find(([date])=>year<=date)||milestones[0];
     $('#atlasEventDate').textContent=`最近的历史节点 · 前${event[0]}`;$('#atlasEventTitle').textContent=event[1];$('#atlasEventDetail').textContent=event[2];
     panel.querySelectorAll('[data-year]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.year)===event[0])));
