@@ -34,7 +34,7 @@ toc.addEventListener('click',event=>{
  const link=event.target.closest('a[href^="#"]');if(!link)return;
  const target=$(link.getAttribute('href'));if(!target)return;event.preventDefault();
  clearFilter();if(mobile.matches)setToc(false);
- requestAnimationFrame(()=>{target.scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'start'});target.setAttribute('tabindex','-1');target.focus({preventScroll:true});});
+ requestAnimationFrame(()=>{target.scrollIntoView({behavior:reduced.matches||Math.abs(target.getBoundingClientRect().top)>innerHeight*2?'instant':'smooth',block:'start'});target.setAttribute('tabindex','-1');target.focus({preventScroll:true});});
 });
 let activeFilter='all';
 const cards=$$('.book-card');
@@ -60,7 +60,7 @@ function measureProgress(){progressMax=Math.max(1,document.documentElement.scrol
 function updateProgress(){if(!cssProgress)$('#readProgress').style.transform=`scaleX(${Math.min(1,Math.max(0,scrollY/progressMax))})`;progressScheduled=false;}
 if(!cssProgress)addEventListener('scroll',()=>{if(!progressScheduled){progressScheduled=true;requestAnimationFrame(updateProgress)}},{passive:true});
 new ResizeObserver(measureProgress).observe($('#main'));addEventListener('resize',measureProgress,{passive:true});
-$('#backTop').addEventListener('click',()=>scrollTo({top:0,behavior:reduced.matches?'instant':'smooth'}));
+$('#backTop').addEventListener('click',()=>scrollTo({top:0,behavior:reduced.matches||scrollY>innerHeight*2?'instant':'smooth'}));
 let size=Math.min(22,Math.max(15,Number(storage.get('atlas-font','17'))||17));
 function setSize(value){size=Math.min(22,Math.max(15,value));document.documentElement.style.setProperty('--body-size',`${size}px`);storage.set('atlas-font',String(size));$('#fontDown').disabled=size<=15;$('#fontUp').disabled=size>=22;}
 $('#fontDown').addEventListener('click',()=>setSize(size-1));$('#fontUp').addEventListener('click',()=>setSize(size+1));setSize(size);

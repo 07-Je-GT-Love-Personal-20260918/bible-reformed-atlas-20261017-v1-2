@@ -16,7 +16,7 @@ class Page(HTMLParser):
                 self.ids.add(value)
             if key in ('href','src') and value:self.links.append(value)
 
-paths=[public/'index.html',public/'study.html',public/'creeds.html',*[public/(x+'.html') for x in ['gospels','jesus-life','kings-chronicles','book-relations']],*sorted((public/'books').glob('*.html'))]
+paths=[public/'index.html',public/'study.html',public/'creeds.html',*[public/(x+'.html') for x in ['gospels','jesus-life','kings-chronicles','book-relations','pentateuch','historical-books','wisdom-books','prophets','epistles','study-paths']],*sorted((public/'books').glob('*.html'))]
 cache={p.resolve():Page(p.read_text(encoding='utf-8')) for p in public.rglob('*.html')}
 errors=[]
 for path in paths:
@@ -53,3 +53,13 @@ assert not errors
 
 assert (public/"jesus-life.html").read_text().count("class=\"life-event\"")==52
 assert len(json.loads((root/"data/kings-v16.json").read_text()))==39
+
+canon=json.loads((root/'data/canon-comparisons-v17.json').read_text())
+assert len(canon['focus'])==60
+for group,expected in zip(canon['groups'],[5,12,5,17,21]):
+    text=(public/(group['slug']+'.html')).read_text()
+    assert text.count('class="canon-book"')==expected
+    assert text.count('class="path-step"')==expected*3
+    assert 'groupAnswer' in text and 'canonSearch' in text
+cases=(root/'data/canon-cases-v17.tsv').read_text().splitlines()
+assert len(cases)==22 and all(len(row.split('|'))==8 for row in cases)

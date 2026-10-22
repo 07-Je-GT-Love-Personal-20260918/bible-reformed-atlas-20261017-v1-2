@@ -33,3 +33,9 @@ thead th{background:var(--green);color:var(--card)}:root[data-theme=dark] thead 
 :root[data-motion=off] .reader-hero{--float:paused}
 
 mark.note-bold{background:transparent;color:var(--green);font-weight:800;text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:5px}mark.note-block{background:color-mix(in srgb,var(--green) 10%,transparent);border-inline-start:3px solid var(--green);padding-inline:5px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+
+/* Native input scrolling; skip long animated sweeps through dense prose. */
+html{scroll-behavior:auto}
+@media(max-width:900px){.toc-toggle,.reader-settings{backdrop-filter:none;background:var(--card)}}
+
+.note-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.note-toolbar input{min-width:0;max-width:100%;width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;font:inherit;background:var(--paper);color:var(--ink)}.note-toolbar select,.note-style-select{font:inherit;font-size:12px;padding:9px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:9px;max-width:100%}.note-edit{width:100%;margin-bottom:10px}.note-label{display:block;color:var(--muted);font-size:11px;margin-top:8px}.note-actions button{transition:transform .16s ease-out}.note-actions button:active{transform:scale(.97)}.note-violet{color:var(--purple);background:transparent;font-weight:750}.note-green{color:var(--green);background:color-mix(in srgb,var(--green) 12%,transparent);border-bottom:2px solid var(--green)}
