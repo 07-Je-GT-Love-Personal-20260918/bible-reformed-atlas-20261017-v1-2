@@ -16,7 +16,7 @@ class Page(HTMLParser):
                 self.ids.add(value)
             if key in ('href','src') and value:self.links.append(value)
 
-paths=[public/'index.html',public/'study.html',public/'creeds.html',*sorted((public/'books').glob('*.html'))]
+paths=[public/'index.html',public/'study.html',public/'creeds.html',*[public/(x+'.html') for x in ['gospels','jesus-life','kings-chronicles','book-relations']],*sorted((public/'books').glob('*.html'))]
 cache={p.resolve():Page(p.read_text(encoding='utf-8')) for p in public.rglob('*.html')}
 errors=[]
 for path in paths:
@@ -50,3 +50,6 @@ for number in range(1,67):
 print('Static validation:',len(paths),'pages;',len(books),'complete book records;',len(errors),'link/fragment/id errors.')
 for error in errors:print(error)
 assert not errors
+
+assert (public/"jesus-life.html").read_text().count("class=\"life-event\"")==52
+assert len(json.loads((root/"data/kings-v16.json").read_text()))==39

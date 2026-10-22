@@ -1,0 +1,236 @@
+[
+  {
+    "name": "耶罗波安一世",
+    "side": "north",
+    "start": 931,
+    "end": 910
+  },
+  {
+    "name": "拿答",
+    "side": "north",
+    "start": 910,
+    "end": 909
+  },
+  {
+    "name": "巴沙",
+    "side": "north",
+    "start": 909,
+    "end": 886
+  },
+  {
+    "name": "以拉",
+    "side": "north",
+    "start": 886,
+    "end": 885
+  },
+  {
+    "name": "心利",
+    "side": "north",
+    "start": 885,
+    "end": 885
+  },
+  {
+    "name": "暗利",
+    "side": "north",
+    "start": 885,
+    "end": 874
+  },
+  {
+    "name": "亚哈",
+    "side": "north",
+    "start": 874,
+    "end": 853
+  },
+  {
+    "name": "亚哈谢",
+    "side": "north",
+    "start": 853,
+    "end": 852
+  },
+  {
+    "name": "约兰",
+    "side": "north",
+    "start": 852,
+    "end": 841
+  },
+  {
+    "name": "耶户",
+    "side": "north",
+    "start": 841,
+    "end": 814
+  },
+  {
+    "name": "约哈斯",
+    "side": "north",
+    "start": 814,
+    "end": 798
+  },
+  {
+    "name": "约阿施",
+    "side": "north",
+    "start": 798,
+    "end": 782
+  },
+  {
+    "name": "耶罗波安二世",
+    "side": "north",
+    "start": 793,
+    "end": 753
+  },
+  {
+    "name": "撒迦利雅",
+    "side": "north",
+    "start": 753,
+    "end": 752
+  },
+  {
+    "name": "沙龙",
+    "side": "north",
+    "start": 752,
+    "end": 752
+  },
+  {
+    "name": "米拿现",
+    "side": "north",
+    "start": 752,
+    "end": 742
+  },
+  {
+    "name": "比加辖",
+    "side": "north",
+    "start": 742,
+    "end": 740
+  },
+  {
+    "name": "比加",
+    "side": "north",
+    "start": 752,
+    "end": 732
+  },
+  {
+    "name": "何细亚",
+    "side": "north",
+    "start": 732,
+    "end": 722
+  },
+  {
+    "name": "罗波安",
+    "side": "south",
+    "start": 931,
+    "end": 913
+  },
+  {
+    "name": "亚比央",
+    "side": "south",
+    "start": 913,
+    "end": 911
+  },
+  {
+    "name": "亚撒",
+    "side": "south",
+    "start": 911,
+    "end": 870
+  },
+  {
+    "name": "约沙法",
+    "side": "south",
+    "start": 873,
+    "end": 848
+  },
+  {
+    "name": "约兰",
+    "side": "south",
+    "start": 853,
+    "end": 841
+  },
+  {
+    "name": "亚哈谢",
+    "side": "south",
+    "start": 841,
+    "end": 841
+  },
+  {
+    "name": "亚他利雅",
+    "side": "south",
+    "start": 841,
+    "end": 835
+  },
+  {
+    "name": "约阿施",
+    "side": "south",
+    "start": 835,
+    "end": 796
+  },
+  {
+    "name": "亚玛谢",
+    "side": "south",
+    "start": 796,
+    "end": 767
+  },
+  {
+    "name": "乌西雅",
+    "side": "south",
+    "start": 792,
+    "end": 740
+  },
+  {
+    "name": "约坦",
+    "side": "south",
+    "start": 750,
+    "end": 732
+  },
+  {
+    "name": "亚哈斯",
+    "side": "south",
+    "start": 735,
+    "end": 715
+  },
+  {
+    "name": "希西家",
+    "side": "south",
+    "start": 729,
+    "end": 686
+  },
+  {
+    "name": "玛拿西",
+    "side": "south",
+    "start": 697,
+    "end": 642
+  },
+  {
+    "name": "亚们",
+    "side": "south",
+    "start": 642,
+    "end": 640
+  },
+  {
+    "name": "约西亚",
+    "side": "south",
+    "start": 640,
+    "end": 609
+  },
+  {
+    "name": "约哈斯",
+    "side": "south",
+    "start": 609,
+    "end": 609
+  },
+  {
+    "name": "约雅敬",
+    "side": "south",
+    "start": 609,
+    "end": 598
+  },
+  {
+    "name": "约雅斤",
+    "side": "south",
+    "start": 598,
+    "end": 597
+  },
+  {
+    "name": "西底家",
+    "side": "south",
+    "start": 597,
+    "end": 586
+  }
+]

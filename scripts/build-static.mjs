@@ -1,6 +1,7 @@
 import {mkdir,copyFile,cp,readdir,rm} from 'node:fs/promises';
 import {resolve,dirname,basename} from 'node:path';
 await import('./build-book-readers.mjs');
+await import('./build-comparisons.mjs');
 await import('./compose-reader.mjs');
 const destination=resolve('dist');
 if(dirname(destination)!==resolve('.')||basename(destination)!=='dist')throw Error('Unexpected static output path');
